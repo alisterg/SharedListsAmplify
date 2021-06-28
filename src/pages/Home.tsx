@@ -5,7 +5,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import CategoryDropdown from "../components/CategoryDropdown";
 import { API, graphqlOperation } from "aws-amplify";
 import { listListItems } from "../graphql/queries";
@@ -15,10 +15,18 @@ import cloneDeep from "lodash/cloneDeep";
 
 const Home: React.FC = () => {
   const [listItems, setListItems] = useState<Array<ListItem>>([]);
+  let initialSubscription = null;
+  let subscription = null;
 
   useEffect(() => {
     fetchListItems();
     subscribeListItems();
+  }, []);
+
+  useLayoutEffect(() => {
+    return () => {
+      subscription = null;
+    };
   }, []);
 
   const fetchListItems = async () => {
@@ -30,16 +38,25 @@ const Home: React.FC = () => {
     setListItems(items);
   };
 
+  /**
+   * TODO: this isn't working because the Amplify Admin UI
+   * doesn't create items properly?
+   * see here: https://github.com/aws-amplify/amplify-js/issues/5115
+   * can't use that solution because we don't control the graphql
+   * operation, AWS does...
+   */
   const subscribeListItems = async () => {
-    (await API.graphql(
-      graphqlOperation(onCreateListItem)
-    ) as any).subscribe({
+    subscription = (
+      (await API.graphql(graphqlOperation(onCreateListItem))) as any
+    ).subscribe({
       next: (listItemData: any) => {
-        debugger
-        const newItem = listItemData.value.data.onCreateListItem;
-        const updatedItems = cloneDeep(listItems);
-        updatedItems.push(newItem);
-        setListItems(updatedItems);
+        console.log("subsribe hit: ", listItemData)
+        if (listItemData.value.data.onCreateListItem) {
+          const newItem = listItemData.value.data.onCreateListItem;
+          const updatedItems = cloneDeep(listItems);
+          updatedItems.push(newItem);
+          setListItems(updatedItems);
+        }
       },
     });
   };
@@ -60,7 +77,10 @@ const Home: React.FC = () => {
         </IonHeader>
 
         {listItems.map((item) => (
-          <CategoryDropdown key={item.id} />
+          <div key={item.id}>
+            {item.title}<br/>
+          </div>
+          // <CategoryDropdown key={item.id} />
         ))}
       </IonContent>
     </IonPage>
