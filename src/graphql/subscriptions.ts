@@ -7,19 +7,26 @@ export const onCreateList = /* GraphQL */ `
     onCreateList {
       id
       name
-      items {
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      childItems {
         items {
           id
           title
           isComplete
           listID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -28,19 +35,26 @@ export const onUpdateList = /* GraphQL */ `
     onUpdateList {
       id
       name
-      items {
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      childItems {
         items {
           id
           title
           isComplete
           listID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -49,19 +63,26 @@ export const onDeleteList = /* GraphQL */ `
     onDeleteList {
       id
       name
-      items {
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      childItems {
         items {
           id
           title
           isComplete
           listID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -72,17 +93,24 @@ export const onCreateListItem = /* GraphQL */ `
       title
       isComplete
       listID
-      list {
-        id
-        name
-        items {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      parentList {
+        id
+        name
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        childItems {
+          nextToken
+          startedAt
+        }
+      }
     }
   }
 `;
@@ -93,17 +121,24 @@ export const onUpdateListItem = /* GraphQL */ `
       title
       isComplete
       listID
-      list {
-        id
-        name
-        items {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      parentList {
+        id
+        name
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        childItems {
+          nextToken
+          startedAt
+        }
+      }
     }
   }
 `;
@@ -114,17 +149,24 @@ export const onDeleteListItem = /* GraphQL */ `
       title
       isComplete
       listID
-      list {
-        id
-        name
-        items {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      parentList {
+        id
+        name
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        childItems {
+          nextToken
+          startedAt
+        }
+      }
     }
   }
 `;

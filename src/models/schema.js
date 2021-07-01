@@ -17,8 +17,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "items": {
-                    "name": "items",
+                "childItems": {
+                    "name": "childItems",
                     "isArray": true,
                     "type": {
                         "model": "ListItem"
@@ -28,7 +28,7 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "list"
+                        "associatedWith": "listID"
                     }
                 },
                 "createdAt": {
@@ -97,8 +97,15 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "list": {
-                    "name": "list",
+                "listID": {
+                    "name": "listID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "parentList": {
+                    "name": "parentList",
                     "isArray": false,
                     "type": {
                         "model": "List"
@@ -107,7 +114,7 @@ export const schema = {
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
-                        "targetName": "listID"
+                        "targetName": "listItemParentListId"
                     }
                 },
                 "createdAt": {
@@ -164,5 +171,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "6e7183b380eedb899e27f782658ee1e5"
+    "version": "725aca8a3790552c87f33fc69e24703a"
 };

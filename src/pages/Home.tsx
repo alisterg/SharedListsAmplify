@@ -1,86 +1,59 @@
 import {
   IonContent,
-  IonHeader,
+  IonHeader, IonLoading,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CategoryDropdown from "../components/CategoryDropdown";
 import { API, graphqlOperation } from "aws-amplify";
-import { listListItems } from "../graphql/queries";
+import { listListItems, listLists } from "../graphql/queries";
 import { ListItem } from "../graphql/API";
 import { onCreateListItem } from "../graphql/subscriptions";
 import cloneDeep from "lodash/cloneDeep";
+import { createListItem } from "../graphql/mutations";
+import { List } from "../models";
+
+export interface GraphQLResult {
+  data?: Record<string, any>;
+  errors?: [object];
+  extensions?: {
+    [key: string]: any;
+  };
+}
 
 const Home: React.FC = () => {
-  const [listItems, setListItems] = useState<Array<ListItem>>([]);
-  let initialSubscription = null;
-  let subscription = null;
+  const [lists, setLists] = useState<GraphQLResult>();
 
   useEffect(() => {
-    fetchListItems();
-    subscribeListItems();
-  }, []);
-
-  useLayoutEffect(() => {
-    return () => {
-      subscription = null;
+    const fetch = async () => {
+      try {
+        const result = await API.graphql(graphqlOperation(listLists));
+        setLists({ data: result });
+      } catch (e) {
+        console.log("Couldn't fetch lists", e);
+      }
     };
-  }, []);
 
-  const fetchListItems = async () => {
-    const listItemData = (await API.graphql(
-      graphqlOperation(listListItems)
-    )) as any;
+    fetch();
+  }, [lists]);
 
-    const items = listItemData.data.listListItems.items;
-    setListItems(items);
-  };
+  if (!lists) return <IonLoading isOpen={true} />;
 
-  /**
-   * TODO: this isn't working because the Amplify Admin UI
-   * doesn't create items properly?
-   * see here: https://github.com/aws-amplify/amplify-js/issues/5115
-   * can't use that solution because we don't control the graphql
-   * operation, AWS does...
-   */
-  const subscribeListItems = async () => {
-    subscription = (
-      (await API.graphql(graphqlOperation(onCreateListItem))) as any
-    ).subscribe({
-      next: (listItemData: any) => {
-        console.log("subsribe hit: ", listItemData)
-        if (listItemData.value.data.onCreateListItem) {
-          const newItem = listItemData.value.data.onCreateListItem;
-          const updatedItems = cloneDeep(listItems);
-          updatedItems.push(newItem);
-          setListItems(updatedItems);
-        }
-      },
-    });
-  };
+  const listsToDisplay = lists.data?.data.listLists.items;
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Shopperize</IonTitle>
+          <IonTitle>Shoppingu</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Hey</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-
-        {listItems.map((item) => (
-          <div key={item.id}>
-            {item.title}<br/>
-          </div>
-          // <CategoryDropdown key={item.id} />
+        {listsToDisplay.map((list: List) => (
+          <CategoryDropdown key={list.id} list={list} />
         ))}
       </IonContent>
     </IonPage>

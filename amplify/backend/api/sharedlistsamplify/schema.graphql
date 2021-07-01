@@ -1,14 +1,14 @@
 type List @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
-  items: [ListItem] @connection(keyName: "byList", fields: ["id"])
+  childItems: [ListItem] @connection(keyName: "byList", fields: ["id"])
 }
 
 type ListItem @model @key(name: "byList", fields: ["listID"]) @auth(rules: [{allow: public}]) {
   id: ID!
   title: String!
   isComplete: Boolean
-  listID: ID!
-  list: List @connection(fields: ["listID"])
+  listID: ID
+  parentList: List @connection
 }
  

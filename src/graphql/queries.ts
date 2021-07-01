@@ -7,19 +7,26 @@ export const getList = /* GraphQL */ `
     getList(id: $id) {
       id
       name
-      items {
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      childItems {
         items {
           id
           title
           isComplete
           listID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -33,13 +40,56 @@ export const listLists = /* GraphQL */ `
       items {
         id
         name
-        items {
-          nextToken
-        }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        childItems {
+          nextToken
+          startedAt
+          items {
+            id
+            createdAt
+            isComplete
+            title
+            updatedAt
+          }
+        }
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncLists = /* GraphQL */ `
+  query SyncLists(
+    $filter: ModelListFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncLists(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        childItems {
+          nextToken
+          startedAt
+        }
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -50,17 +100,24 @@ export const getListItem = /* GraphQL */ `
       title
       isComplete
       listID
-      list {
-        id
-        name
-        items {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      parentList {
+        id
+        name
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        childItems {
+          nextToken
+          startedAt
+        }
+      }
     }
   }
 `;
@@ -76,16 +133,61 @@ export const listListItems = /* GraphQL */ `
         title
         isComplete
         listID
-        list {
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        parentList {
           id
           name
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
-        createdAt
-        updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncListItems = /* GraphQL */ `
+  query SyncListItems(
+    $filter: ModelListItemFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncListItems(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        title
+        isComplete
+        listID
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        parentList {
+          id
+          name
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
+      }
+      nextToken
+      startedAt
     }
   }
 `;

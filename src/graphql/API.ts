@@ -5,6 +5,7 @@
 export type CreateListInput = {
   id?: string | null,
   name: string,
+  _version?: number | null,
 };
 
 export type ModelListConditionInput = {
@@ -58,15 +59,19 @@ export type List = {
   __typename: "List",
   id: string,
   name: string,
-  items?: ModelListItemConnection | null,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
   createdAt: string,
   updatedAt: string,
+  childItems?: ModelListItemConnection | null,
 };
 
 export type ModelListItemConnection = {
   __typename: "ModelListItemConnection",
   items?:  Array<ListItem | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ListItem = {
@@ -74,26 +79,33 @@ export type ListItem = {
   id: string,
   title: string,
   isComplete?: boolean | null,
-  listID: string,
-  list?: List | null,
+  listID?: string | null,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
   createdAt: string,
   updatedAt: string,
+  parentList?: List | null,
 };
 
 export type UpdateListInput = {
   id: string,
   name?: string | null,
+  _version?: number | null,
 };
 
 export type DeleteListInput = {
   id: string,
+  _version?: number | null,
 };
 
 export type CreateListItemInput = {
   id?: string | null,
   title: string,
   isComplete?: boolean | null,
-  listID: string,
+  listID?: string | null,
+  _version?: number | null,
+  listItemParentListId?: string | null,
 };
 
 export type ModelListItemConditionInput = {
@@ -133,10 +145,13 @@ export type UpdateListItemInput = {
   title?: string | null,
   isComplete?: boolean | null,
   listID?: string | null,
+  _version?: number | null,
+  listItemParentListId?: string | null,
 };
 
 export type DeleteListItemInput = {
   id: string,
+  _version?: number | null,
 };
 
 export type ModelListFilterInput = {
@@ -151,6 +166,7 @@ export type ModelListConnection = {
   __typename: "ModelListConnection",
   items?:  Array<List | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelListItemFilterInput = {
@@ -173,21 +189,28 @@ export type CreateListMutation = {
     __typename: "List",
     id: string,
     name: string,
-    items?:  {
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
         __typename: "ListItem",
         id: string,
         title: string,
         isComplete?: boolean | null,
-        listID: string,
+        listID?: string | null,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -201,21 +224,28 @@ export type UpdateListMutation = {
     __typename: "List",
     id: string,
     name: string,
-    items?:  {
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
         __typename: "ListItem",
         id: string,
         title: string,
         isComplete?: boolean | null,
-        listID: string,
+        listID?: string | null,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -229,21 +259,28 @@ export type DeleteListMutation = {
     __typename: "List",
     id: string,
     name: string,
-    items?:  {
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
         __typename: "ListItem",
         id: string,
         title: string,
         isComplete?: boolean | null,
-        listID: string,
+        listID?: string | null,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -258,20 +295,27 @@ export type CreateListItemMutation = {
     id: string,
     title: string,
     isComplete?: boolean | null,
-    listID: string,
-    list?:  {
+    listID?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    parentList?:  {
       __typename: "List",
       id: string,
       name: string,
-      items?:  {
-        __typename: "ModelListItemConnection",
-        nextToken?: string | null,
-      } | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      childItems?:  {
+        __typename: "ModelListItemConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -286,20 +330,27 @@ export type UpdateListItemMutation = {
     id: string,
     title: string,
     isComplete?: boolean | null,
-    listID: string,
-    list?:  {
+    listID?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    parentList?:  {
       __typename: "List",
       id: string,
       name: string,
-      items?:  {
-        __typename: "ModelListItemConnection",
-        nextToken?: string | null,
-      } | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      childItems?:  {
+        __typename: "ModelListItemConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -314,20 +365,27 @@ export type DeleteListItemMutation = {
     id: string,
     title: string,
     isComplete?: boolean | null,
-    listID: string,
-    list?:  {
+    listID?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    parentList?:  {
       __typename: "List",
       id: string,
       name: string,
-      items?:  {
-        __typename: "ModelListItemConnection",
-        nextToken?: string | null,
-      } | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      childItems?:  {
+        __typename: "ModelListItemConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -340,21 +398,28 @@ export type GetListQuery = {
     __typename: "List",
     id: string,
     name: string,
-    items?:  {
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
         __typename: "ListItem",
         id: string,
         title: string,
         isComplete?: boolean | null,
-        listID: string,
+        listID?: string | null,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -371,14 +436,49 @@ export type ListListsQuery = {
       __typename: "List",
       id: string,
       name: string,
-      items?:  {
-        __typename: "ModelListItemConnection",
-        nextToken?: string | null,
-      } | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      childItems?:  {
+        __typename: "ModelListItemConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
     } | null > | null,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncListsQueryVariables = {
+  filter?: ModelListFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncListsQuery = {
+  syncLists?:  {
+    __typename: "ModelListConnection",
+    items?:  Array< {
+      __typename: "List",
+      id: string,
+      name: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      childItems?:  {
+        __typename: "ModelListItemConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -392,20 +492,27 @@ export type GetListItemQuery = {
     id: string,
     title: string,
     isComplete?: boolean | null,
-    listID: string,
-    list?:  {
+    listID?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    parentList?:  {
       __typename: "List",
       id: string,
       name: string,
-      items?:  {
-        __typename: "ModelListItemConnection",
-        nextToken?: string | null,
-      } | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      childItems?:  {
+        __typename: "ModelListItemConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -423,18 +530,62 @@ export type ListListItemsQuery = {
       id: string,
       title: string,
       isComplete?: boolean | null,
-      listID: string,
-      list?:  {
+      listID?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      parentList?:  {
         __typename: "List",
         id: string,
         name: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
       } | null,
-      createdAt: string,
-      updatedAt: string,
     } | null > | null,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncListItemsQueryVariables = {
+  filter?: ModelListItemFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncListItemsQuery = {
+  syncListItems?:  {
+    __typename: "ModelListItemConnection",
+    items?:  Array< {
+      __typename: "ListItem",
+      id: string,
+      title: string,
+      isComplete?: boolean | null,
+      listID?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      parentList?:  {
+        __typename: "List",
+        id: string,
+        name: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -443,21 +594,28 @@ export type OnCreateListSubscription = {
     __typename: "List",
     id: string,
     name: string,
-    items?:  {
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
         __typename: "ListItem",
         id: string,
         title: string,
         isComplete?: boolean | null,
-        listID: string,
+        listID?: string | null,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -466,21 +624,28 @@ export type OnUpdateListSubscription = {
     __typename: "List",
     id: string,
     name: string,
-    items?:  {
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
         __typename: "ListItem",
         id: string,
         title: string,
         isComplete?: boolean | null,
-        listID: string,
+        listID?: string | null,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -489,21 +654,28 @@ export type OnDeleteListSubscription = {
     __typename: "List",
     id: string,
     name: string,
-    items?:  {
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
         __typename: "ListItem",
         id: string,
         title: string,
         isComplete?: boolean | null,
-        listID: string,
+        listID?: string | null,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -513,20 +685,27 @@ export type OnCreateListItemSubscription = {
     id: string,
     title: string,
     isComplete?: boolean | null,
-    listID: string,
-    list?:  {
+    listID?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    parentList?:  {
       __typename: "List",
       id: string,
       name: string,
-      items?:  {
-        __typename: "ModelListItemConnection",
-        nextToken?: string | null,
-      } | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      childItems?:  {
+        __typename: "ModelListItemConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -536,20 +715,27 @@ export type OnUpdateListItemSubscription = {
     id: string,
     title: string,
     isComplete?: boolean | null,
-    listID: string,
-    list?:  {
+    listID?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    parentList?:  {
       __typename: "List",
       id: string,
       name: string,
-      items?:  {
-        __typename: "ModelListItemConnection",
-        nextToken?: string | null,
-      } | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      childItems?:  {
+        __typename: "ModelListItemConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -559,19 +745,26 @@ export type OnDeleteListItemSubscription = {
     id: string,
     title: string,
     isComplete?: boolean | null,
-    listID: string,
-    list?:  {
+    listID?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    parentList?:  {
       __typename: "List",
       id: string,
       name: string,
-      items?:  {
-        __typename: "ModelListItemConnection",
-        nextToken?: string | null,
-      } | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      childItems?:  {
+        __typename: "ModelListItemConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };

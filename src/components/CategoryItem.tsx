@@ -1,11 +1,16 @@
 import React from "react";
+import { ListItem } from "../models";
 
-const Category: React.FC = () => {
+interface Props {
+  item: ListItem | null;
+}
+
+const CategoryItem: React.FC<Props> = ({ item }) => {
   return (
-    <div className="container">
-      <strong>Hello world</strong>
+    <div>
+      <strong>{item?.title}</strong>
     </div>
   );
 };
 
-export default Category;
+export default CategoryItem;
