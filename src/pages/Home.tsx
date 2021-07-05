@@ -1,6 +1,11 @@
 import {
+  IonButton,
   IonContent,
-  IonHeader, IonLoading,
+  IonHeader,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLoading,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -8,40 +13,23 @@ import {
 import React, { useEffect, useState } from "react";
 import CategoryDropdown from "../components/CategoryDropdown";
 import { API, graphqlOperation } from "aws-amplify";
-import { listListItems, listLists } from "../graphql/queries";
-import { ListItem } from "../graphql/API";
-import { onCreateListItem } from "../graphql/subscriptions";
-import cloneDeep from "lodash/cloneDeep";
-import { createListItem } from "../graphql/mutations";
-import { List } from "../models";
-
-export interface GraphQLResult {
-  data?: Record<string, any>;
-  errors?: [object];
-  extensions?: {
-    [key: string]: any;
-  };
-}
+import { listLists } from "../graphql/queries";
+import { AllListsResponse } from "../models/ListsResponse";
+import { add, arrowForward } from "ionicons/icons";
 
 const Home: React.FC = () => {
-  const [lists, setLists] = useState<GraphQLResult>();
+  const [lists, setLists] = useState<{ data?: Record<string, any> }>();
 
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        const result = await API.graphql(graphqlOperation(listLists));
-        setLists({ data: result });
-      } catch (e) {
-        console.log("Couldn't fetch lists", e);
-      }
-    };
-
-    fetch();
+    (async () => {
+      const result = await API.graphql(graphqlOperation(listLists));
+      setLists({ data: result });
+    })();
   }, [lists]);
 
   if (!lists) return <IonLoading isOpen={true} />;
 
-  const listsToDisplay = lists.data?.data.listLists.items;
+  const listsToDisplay: AllListsResponse[] = lists.data?.data.listLists.items;
 
   return (
     <IonPage>
@@ -52,7 +40,7 @@ const Home: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        {listsToDisplay.map((list: List) => (
+        {listsToDisplay.map((list) => (
           <CategoryDropdown key={list.id} list={list} />
         ))}
       </IonContent>
