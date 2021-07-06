@@ -16,15 +16,30 @@ import { API, graphqlOperation } from "aws-amplify";
 import { listLists } from "../graphql/queries";
 import { AllListsResponse } from "../models/ListsResponse";
 import { add, arrowForward } from "ionicons/icons";
+import { DataStore } from "@aws-amplify/datastore";
+import {List, ListItem} from "../models";
 
 const Home: React.FC = () => {
-  const [lists, setLists] = useState<{ data?: Record<string, any> }>();
+  const [lists, setLists] = useState<List[]>();
 
+  // TODO: datastore: use DataStore.observe(ListItem).subscribe
+  // for real time subscriptions
+  // https://www.youtube.com/watch?v=CXeRQn62Ptw
+  // https://docs.amplify.aws/lib/graphqlapi/subscribe-data/q/platform/js
+  
   useEffect(() => {
     (async () => {
-      const result = await API.graphql(graphqlOperation(listLists));
-      setLists({ data: result });
+      const listsResult = await DataStore.query(List);
+      const listItemsResult = await DataStore.query(ListItem);
+      
+      setLists(listsResult);
     })();
+    
+    
+    // (async () => {
+    //   const result = await API.graphql(graphqlOperation(listLists));
+    //   setLists({ data: result });
+    // })();
   }, [lists]);
 
   if (!lists) return <IonLoading isOpen={true} />;
