@@ -1,10 +1,6 @@
 import {
-  IonButton,
   IonContent,
   IonHeader,
-  IonIcon,
-  IonInput,
-  IonItem,
   IonLoading,
   IonPage,
   IonTitle,
@@ -12,50 +8,38 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import CategoryDropdown from "../components/CategoryDropdown";
-import { API, graphqlOperation } from "aws-amplify";
-import { listLists } from "../graphql/queries";
-import { AllListsResponse } from "../models/ListsResponse";
-import { add, arrowForward } from "ionicons/icons";
 import { DataStore } from "@aws-amplify/datastore";
-import {List, ListItem} from "../models";
+import { List, ListItem } from "../models";
 
 const Home: React.FC = () => {
   const [lists, setLists] = useState<List[]>();
 
-  // TODO: datastore: use DataStore.observe(ListItem).subscribe
-  // for real time subscriptions
+  // TODO: I think amplify is buggy in the order that I added the services...
+  // DataStore isn't working properly
   // https://www.youtube.com/watch?v=CXeRQn62Ptw
   // https://docs.amplify.aws/lib/graphqlapi/subscribe-data/q/platform/js
-  
+
   useEffect(() => {
-    (async () => {
+    const subscription = DataStore.observe(List).subscribe(async (msg) => {
       const listsResult = await DataStore.query(List);
-      const listItemsResult = await DataStore.query(ListItem);
-      
       setLists(listsResult);
-    })();
-    
-    
-    // (async () => {
-    //   const result = await API.graphql(graphqlOperation(listLists));
-    //   setLists({ data: result });
-    // })();
-  }, [lists]);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   if (!lists) return <IonLoading isOpen={true} />;
-
-  const listsToDisplay: AllListsResponse[] = lists.data?.data.listLists.items;
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Shoppingu</IonTitle>
+          <IonTitle>🍍 Go Shop 🍉</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
-        {listsToDisplay.map((list) => (
+        {lists.map((list) => (
           <CategoryDropdown key={list.id} list={list} />
         ))}
       </IonContent>
