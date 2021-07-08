@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@aws-amplify/ui-react": "^1.2.4",
     "@capacitor/app": "1.0.2",
     "@capacitor/core": "3.0.2",
     "@capacitor/haptics": "1.0.2",

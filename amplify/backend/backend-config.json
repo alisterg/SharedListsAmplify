@@ -21,5 +21,12 @@
       }
     }
   },
-  "auth": {}
+  "auth": {
+    "sharedlistsamplifyba78a5a1": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
 }

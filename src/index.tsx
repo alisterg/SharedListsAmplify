@@ -4,9 +4,9 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import Amplify from "aws-amplify";
-import awsmobile from "./aws-exports";
+import awsConfig from "./aws-exports";
 
-Amplify.configure(awsmobile);
+Amplify.configure(awsConfig);
 
 ReactDOM.render(
   <React.StrictMode>

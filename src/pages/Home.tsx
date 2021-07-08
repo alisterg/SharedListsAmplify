@@ -1,7 +1,7 @@
 import {
+  IonButtons,
   IonContent,
   IonHeader,
-  IonLoading,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -9,42 +9,52 @@ import {
 import React, { useEffect, useState } from "react";
 import CategoryDropdown from "../components/CategoryDropdown";
 import { DataStore } from "@aws-amplify/datastore";
-import { List, ListItem } from "../models";
+import { List } from "../models";
+import { AmplifySignOut, withAuthenticator } from "@aws-amplify/ui-react";
 
 const Home: React.FC = () => {
   const [lists, setLists] = useState<List[]>();
-
-  // TODO: I think amplify is buggy in the order that I added the services...
-  // DataStore isn't working properly
   // https://www.youtube.com/watch?v=CXeRQn62Ptw
   // https://docs.amplify.aws/lib/graphqlapi/subscribe-data/q/platform/js
 
   useEffect(() => {
-    const subscription = DataStore.observe(List).subscribe(async (msg) => {
-      const listsResult = await DataStore.query(List);
-      setLists(listsResult);
+    fetchLists();
+    // TODO: this is not including ListItems which I think is why it isn't working
+    // 
+    const subscription = DataStore.observe(List).subscribe((msg) => {
+      fetchLists();
+      console.log("Subscription hit: ", msg);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  if (!lists) return <IonLoading isOpen={true} />;
+  const fetchLists = async () => {
+    const listsResult = await DataStore.query(List);
+    console.log("Lists: ", listsResult);
+    setLists(listsResult);
+  };
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>🍍 Go Shop 🍉</IonTitle>
+          <IonButtons slot="end">
+            <AmplifySignOut />
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
-        {lists.map((list) => (
-          <CategoryDropdown key={list.id} list={list} />
-        ))}
+        {lists ? (
+          lists.map((list) => <CategoryDropdown key={list.id} list={list} />)
+        ) : (
+          <div>TODO: Show empty state</div>
+        )}
       </IonContent>
     </IonPage>
   );
 };
 
-export default Home;
+export default withAuthenticator(Home);
