@@ -14,19 +14,16 @@ import { AmplifySignOut, withAuthenticator } from "@aws-amplify/ui-react";
 
 const Home: React.FC = () => {
   const [lists, setLists] = useState<List[]>();
-  // https://www.youtube.com/watch?v=CXeRQn62Ptw
-  // https://docs.amplify.aws/lib/graphqlapi/subscribe-data/q/platform/js
 
   useEffect(() => {
     fetchLists();
-    // TODO: this is not including ListItems which I think is why it isn't working
-    // 
-    const subscription = DataStore.observe(List).subscribe((msg) => {
+
+    const listsSubscription = DataStore.observe(List).subscribe((msg) => {
       fetchLists();
-      console.log("Subscription hit: ", msg);
+      console.log("List subscription hit: ", msg);
     });
 
-    return () => subscription.unsubscribe();
+    return () => listsSubscription.unsubscribe();
   }, []);
 
   const fetchLists = async () => {

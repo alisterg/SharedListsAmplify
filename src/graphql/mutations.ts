@@ -15,6 +15,7 @@ export const createList = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      owner
       childItems {
         items {
           id
@@ -26,6 +27,7 @@ export const createList = /* GraphQL */ `
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
         startedAt
@@ -46,6 +48,7 @@ export const updateList = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      owner
       childItems {
         items {
           id
@@ -57,6 +60,7 @@ export const updateList = /* GraphQL */ `
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
         startedAt
@@ -77,6 +81,7 @@ export const deleteList = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      owner
       childItems {
         items {
           id
@@ -88,6 +93,7 @@ export const deleteList = /* GraphQL */ `
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
         startedAt
@@ -118,11 +124,13 @@ export const createListItem = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        owner
         childItems {
           nextToken
           startedAt
         }
       }
+      owner
     }
   }
 `;
@@ -149,11 +157,13 @@ export const updateListItem = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        owner
         childItems {
           nextToken
           startedAt
         }
       }
+      owner
     }
   }
 `;
@@ -180,11 +190,13 @@ export const deleteListItem = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        owner
         childItems {
           nextToken
           startedAt
         }
       }
+      owner
     }
   }
 `;

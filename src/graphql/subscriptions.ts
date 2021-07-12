@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateList = /* GraphQL */ `
-  subscription OnCreateList {
-    onCreateList {
+  subscription OnCreateList($owner: String) {
+    onCreateList(owner: $owner) {
       id
       name
       _version
@@ -12,6 +12,7 @@ export const onCreateList = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      owner
       childItems {
         items {
           id
@@ -23,6 +24,7 @@ export const onCreateList = /* GraphQL */ `
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
         startedAt
@@ -31,8 +33,8 @@ export const onCreateList = /* GraphQL */ `
   }
 `;
 export const onUpdateList = /* GraphQL */ `
-  subscription OnUpdateList {
-    onUpdateList {
+  subscription OnUpdateList($owner: String) {
+    onUpdateList(owner: $owner) {
       id
       name
       _version
@@ -40,6 +42,7 @@ export const onUpdateList = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      owner
       childItems {
         items {
           id
@@ -51,6 +54,7 @@ export const onUpdateList = /* GraphQL */ `
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
         startedAt
@@ -59,8 +63,8 @@ export const onUpdateList = /* GraphQL */ `
   }
 `;
 export const onDeleteList = /* GraphQL */ `
-  subscription OnDeleteList {
-    onDeleteList {
+  subscription OnDeleteList($owner: String) {
+    onDeleteList(owner: $owner) {
       id
       name
       _version
@@ -68,6 +72,7 @@ export const onDeleteList = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      owner
       childItems {
         items {
           id
@@ -79,6 +84,7 @@ export const onDeleteList = /* GraphQL */ `
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
         startedAt
@@ -87,8 +93,8 @@ export const onDeleteList = /* GraphQL */ `
   }
 `;
 export const onCreateListItem = /* GraphQL */ `
-  subscription OnCreateListItem {
-    onCreateListItem {
+  subscription OnCreateListItem($owner: String) {
+    onCreateListItem(owner: $owner) {
       id
       title
       isComplete
@@ -106,17 +112,19 @@ export const onCreateListItem = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        owner
         childItems {
           nextToken
           startedAt
         }
       }
+      owner
     }
   }
 `;
 export const onUpdateListItem = /* GraphQL */ `
-  subscription OnUpdateListItem {
-    onUpdateListItem {
+  subscription OnUpdateListItem($owner: String) {
+    onUpdateListItem(owner: $owner) {
       id
       title
       isComplete
@@ -134,17 +142,19 @@ export const onUpdateListItem = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        owner
         childItems {
           nextToken
           startedAt
         }
       }
+      owner
     }
   }
 `;
 export const onDeleteListItem = /* GraphQL */ `
-  subscription OnDeleteListItem {
-    onDeleteListItem {
+  subscription OnDeleteListItem($owner: String) {
+    onDeleteListItem(owner: $owner) {
       id
       title
       isComplete
@@ -162,11 +172,13 @@ export const onDeleteListItem = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        owner
         childItems {
           nextToken
           startedAt
         }
       }
+      owner
     }
   }
 `;

@@ -64,6 +64,7 @@ export type List = {
   _lastChangedAt: number,
   createdAt: string,
   updatedAt: string,
+  owner?: string | null,
   childItems?: ModelListItemConnection | null,
 };
 
@@ -86,6 +87,7 @@ export type ListItem = {
   createdAt: string,
   updatedAt: string,
   parentList?: List | null,
+  owner?: string | null,
 };
 
 export type UpdateListInput = {
@@ -194,6 +196,7 @@ export type CreateListMutation = {
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
     childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
@@ -207,6 +210,7 @@ export type CreateListMutation = {
         _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null > | null,
       nextToken?: string | null,
       startedAt?: number | null,
@@ -229,6 +233,7 @@ export type UpdateListMutation = {
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
     childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
@@ -242,6 +247,7 @@ export type UpdateListMutation = {
         _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null > | null,
       nextToken?: string | null,
       startedAt?: number | null,
@@ -264,6 +270,7 @@ export type DeleteListMutation = {
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
     childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
@@ -277,6 +284,7 @@ export type DeleteListMutation = {
         _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null > | null,
       nextToken?: string | null,
       startedAt?: number | null,
@@ -310,12 +318,14 @@ export type CreateListItemMutation = {
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
       childItems?:  {
         __typename: "ModelListItemConnection",
         nextToken?: string | null,
         startedAt?: number | null,
       } | null,
     } | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -345,12 +355,14 @@ export type UpdateListItemMutation = {
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
       childItems?:  {
         __typename: "ModelListItemConnection",
         nextToken?: string | null,
         startedAt?: number | null,
       } | null,
     } | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -380,12 +392,14 @@ export type DeleteListItemMutation = {
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
       childItems?:  {
         __typename: "ModelListItemConnection",
         nextToken?: string | null,
         startedAt?: number | null,
       } | null,
     } | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -403,6 +417,7 @@ export type GetListQuery = {
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
     childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
@@ -416,6 +431,7 @@ export type GetListQuery = {
         _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null > | null,
       nextToken?: string | null,
       startedAt?: number | null,
@@ -441,6 +457,7 @@ export type ListListsQuery = {
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
       childItems?:  {
         __typename: "ModelListItemConnection",
         nextToken?: string | null,
@@ -471,6 +488,7 @@ export type SyncListsQuery = {
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
       childItems?:  {
         __typename: "ModelListItemConnection",
         nextToken?: string | null,
@@ -507,12 +525,14 @@ export type GetListItemQuery = {
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
       childItems?:  {
         __typename: "ModelListItemConnection",
         nextToken?: string | null,
         startedAt?: number | null,
       } | null,
     } | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -545,7 +565,9 @@ export type ListListItemsQuery = {
         _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
+      owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -582,11 +604,17 @@ export type SyncListItemsQuery = {
         _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
+      owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
     startedAt?: number | null,
   } | null,
+};
+
+export type OnCreateListSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnCreateListSubscription = {
@@ -599,6 +627,7 @@ export type OnCreateListSubscription = {
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
     childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
@@ -612,11 +641,16 @@ export type OnCreateListSubscription = {
         _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null > | null,
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
   } | null,
+};
+
+export type OnUpdateListSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnUpdateListSubscription = {
@@ -629,6 +663,7 @@ export type OnUpdateListSubscription = {
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
     childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
@@ -642,11 +677,16 @@ export type OnUpdateListSubscription = {
         _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null > | null,
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
   } | null,
+};
+
+export type OnDeleteListSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnDeleteListSubscription = {
@@ -659,6 +699,7 @@ export type OnDeleteListSubscription = {
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
     childItems?:  {
       __typename: "ModelListItemConnection",
       items?:  Array< {
@@ -672,11 +713,16 @@ export type OnDeleteListSubscription = {
         _lastChangedAt: number,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null > | null,
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
   } | null,
+};
+
+export type OnCreateListItemSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnCreateListItemSubscription = {
@@ -700,13 +746,19 @@ export type OnCreateListItemSubscription = {
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
       childItems?:  {
         __typename: "ModelListItemConnection",
         nextToken?: string | null,
         startedAt?: number | null,
       } | null,
     } | null,
+    owner?: string | null,
   } | null,
+};
+
+export type OnUpdateListItemSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnUpdateListItemSubscription = {
@@ -730,13 +782,19 @@ export type OnUpdateListItemSubscription = {
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
       childItems?:  {
         __typename: "ModelListItemConnection",
         nextToken?: string | null,
         startedAt?: number | null,
       } | null,
     } | null,
+    owner?: string | null,
   } | null,
+};
+
+export type OnDeleteListItemSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnDeleteListItemSubscription = {
@@ -760,11 +818,13 @@ export type OnDeleteListItemSubscription = {
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
       childItems?:  {
         __typename: "ModelListItemConnection",
         nextToken?: string | null,
         startedAt?: number | null,
       } | null,
     } | null,
+    owner?: string | null,
   } | null,
 };

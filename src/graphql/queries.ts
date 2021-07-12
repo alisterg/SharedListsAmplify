@@ -12,6 +12,7 @@ export const getList = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      owner
       childItems {
         items {
           id
@@ -23,6 +24,7 @@ export const getList = /* GraphQL */ `
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
         startedAt
@@ -45,16 +47,10 @@ export const listLists = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        owner
         childItems {
           nextToken
           startedAt
-          items {
-            id
-            createdAt
-            isComplete
-            title
-            updatedAt
-          }
         }
       }
       nextToken
@@ -83,6 +79,7 @@ export const syncLists = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        owner
         childItems {
           nextToken
           startedAt
@@ -113,11 +110,13 @@ export const getListItem = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        owner
         childItems {
           nextToken
           startedAt
         }
       }
+      owner
     }
   }
 `;
@@ -146,7 +145,9 @@ export const listListItems = /* GraphQL */ `
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
+        owner
       }
       nextToken
       startedAt
@@ -184,7 +185,9 @@ export const syncListItems = /* GraphQL */ `
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
+        owner
       }
       nextToken
       startedAt
