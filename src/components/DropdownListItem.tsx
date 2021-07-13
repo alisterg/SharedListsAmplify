@@ -2,10 +2,10 @@ import React from "react";
 import { ListItem } from "../models";
 
 interface Props {
-  item: ListItem | null;
+  item: ListItem;
 }
 
-const CategoryItem: React.FC<Props> = ({ item }) => {
+const DropdownListItem: React.FC<Props> = ({ item }) => {
   return (
     <div>
       <strong>{item?.title}</strong>
@@ -13,4 +13,4 @@ const CategoryItem: React.FC<Props> = ({ item }) => {
   );
 };
 
-export default CategoryItem;
+export default DropdownListItem;
