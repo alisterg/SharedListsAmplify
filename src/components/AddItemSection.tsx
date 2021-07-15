@@ -11,7 +11,7 @@ interface Props {
 const AddItemSection: React.FC<Props> = ({ list }) => {
   const [quickAddInp, setQuickAddInp] = useState("");
 
-  const addItemHandler = async () => {
+  const handleAddItemClick = async () => {
     await DataStore.save(
       new ListItem({
         title: quickAddInp,
@@ -34,7 +34,7 @@ const AddItemSection: React.FC<Props> = ({ list }) => {
         onIonChange={(e) => setQuickAddInp(e.detail.value!)}
       />
       {quickAddInp && (
-        <IonButton fill="clear" onClick={addItemHandler}>
+        <IonButton fill="clear" onClick={handleAddItemClick}>
           <IonIcon icon={arrowForward} color="primary" />
         </IonButton>
       )}

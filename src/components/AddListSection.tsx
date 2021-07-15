@@ -7,7 +7,7 @@ import { DataStore } from "@aws-amplify/datastore";
 const AddListSection: React.FC = () => {
   const [quickAddInp, setQuickAddInp] = useState("");
 
-  const addListHandler = async () => {
+  const handleAddListClick = async () => {
     await DataStore.save(new List({ name: quickAddInp }));
     setQuickAddInp("");
   };
@@ -24,7 +24,7 @@ const AddListSection: React.FC = () => {
         onIonChange={(e) => setQuickAddInp(e.detail.value!)}
       />
       {quickAddInp && (
-        <IonButton fill="clear" onClick={addListHandler}>
+        <IonButton fill="clear" onClick={handleAddListClick}>
           <IonIcon icon={arrowForward} color="primary" />
         </IonButton>
       )}
