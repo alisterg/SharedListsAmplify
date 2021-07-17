@@ -58,17 +58,42 @@ const Home: React.FC = () => {
     window.location.reload();
   };
 
+  const handleEditItem = async (item: ListItem, newTitle: string) => {
+    await DataStore.save(
+      ListItem.copyOf(item, (updated) => {
+        updated.title = newTitle;
+      })
+    ); // Could play a saving animation here
+
+    fetchItems();
+  };
+
+  const handleEditList = async (list: List, newTitle: string) => {
+    await DataStore.save(
+      List.copyOf(list, (updated) => {
+        updated.name = newTitle;
+      })
+    ); // Could play a saving animation here
+
+    fetchItems();
+  };
+
   const getPageContent = () => {
     if (!lists || !items) return <div>TODO: Show empty state</div>;
 
     const renderedLists = lists.map((list) => (
-      <DropdownList key={list.id}>
-        <IonCardTitle>{list.name}</IonCardTitle>
+      <DropdownList
+        key={list.id}
+        list={list}
+        onEditName={(newName: string) => handleEditList(list, newName)}
+      >
         {filterItemsForList(list.id).map((item: ListItem, idx: number) => (
-          <DropdownListItem key={idx} item={item} />
+          <DropdownListItem
+            key={idx}
+            item={item}
+            onEditItem={(newTitle: string) => handleEditItem(item, newTitle)}
+          />
         ))}
-
-        <AddItemSection list={list} />
       </DropdownList>
     ));
 
