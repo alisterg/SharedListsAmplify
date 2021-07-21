@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { ListItem } from "../models";
 import "../styles.css";
-import { IonInput } from "@ionic/react";
+import {IonIcon, IonInput, IonItem} from "@ionic/react";
+import {reorderTwoOutline} from "ionicons/icons";
 
 interface Props {
   item: ListItem;
@@ -23,15 +24,19 @@ const DropdownListItem: React.FC<Props> = ({ item, onEditItem }) => {
   };
 
   return (
-    <IonInput
-      onClick={handleSetEditing}
-      ref={inputRefEle}
-      className={isCurrentlyEditing ? "bg-green" : ""}
-      value={newTitle}
-      onIonChange={(e) => setNewTitle(e.detail.value!)}
-      onIonFocus={() => setIsCurrentlyEditing(true)}
-      onIonBlur={handleBlur}
-    />
+    <IonItem mode="ios" lines="none">
+      <IonInput
+        onClick={handleSetEditing}
+        ref={inputRefEle}
+        className={isCurrentlyEditing ? "bg-green" : ""}
+        value={newTitle}
+        onIonChange={(e) => setNewTitle(e.detail.value!)}
+        onIonFocus={() => setIsCurrentlyEditing(true)}
+        onIonBlur={handleBlur}
+      />
+      <IonIcon slot="end" icon={reorderTwoOutline} />
+    </IonItem>
+    
     // <input
     //   className={isCurrentlyEditing ? "bg-green" : ""}
     //   onClick={handleSetEditing}

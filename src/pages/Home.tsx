@@ -1,108 +1,20 @@
 import {
   IonButtons,
-  IonCardTitle,
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useEffect, useState } from "react";
-import { DataStore } from "@aws-amplify/datastore";
-import { List, ListItem } from "../models";
+import React from "react";
 import { withAuthenticator } from "@aws-amplify/ui-react";
-import DropdownListItem from "../components/DropdownListItem";
-import AddItemSection from "../components/AddItemSection";
-import DropdownList from "../components/DropdownList";
-import AddListSection from "../components/AddListSection";
 import { Auth } from "aws-amplify";
+import MainPageContent from "../components/MainPageContent";
 
 const Home: React.FC = () => {
-  const [lists, setLists] = useState<List[]>();
-  const [items, setItems] = useState<ListItem[]>();
-
-  useEffect(() => {
-    fetchLists();
-    fetchItems();
-
-    const listsSubscription = DataStore.observe(List).subscribe(() => {
-      fetchLists();
-    });
-
-    const itemsSubscription = DataStore.observe(ListItem).subscribe(() => {
-      fetchItems();
-    });
-
-    return () => {
-      listsSubscription.unsubscribe();
-      itemsSubscription.unsubscribe();
-    };
-  }, []);
-
-  const fetchLists = async () => {
-    const listsResult = await DataStore.query(List);
-    setLists(listsResult);
-  };
-
-  const fetchItems = async () => {
-    const itemsResult = await DataStore.query(ListItem);
-    setItems(itemsResult);
-  };
-
-  const filterItemsForList = (listId: string) =>
-    items!.filter((i) => i.listID === listId);
-  // await DataStore.query(ListItem, (c) => c.listID("eq", listId));
-
   const handleSignOutClick = async () => {
     await Auth.signOut();
     window.location.reload();
-  };
-
-  const handleEditItem = async (item: ListItem, newTitle: string) => {
-    await DataStore.save(
-      ListItem.copyOf(item, (updated) => {
-        updated.title = newTitle;
-      })
-    ); // Could play a saving animation here
-
-    fetchItems();
-  };
-
-  const handleEditList = async (list: List, newTitle: string) => {
-    await DataStore.save(
-      List.copyOf(list, (updated) => {
-        updated.name = newTitle;
-      })
-    ); // Could play a saving animation here
-
-    fetchItems();
-  };
-
-  const getPageContent = () => {
-    if (!lists || !items) return <div>TODO: Show empty state</div>;
-
-    const renderedLists = lists.map((list) => (
-      <DropdownList
-        key={list.id}
-        list={list}
-        onEditName={(newName: string) => handleEditList(list, newName)}
-      >
-        {filterItemsForList(list.id).map((item: ListItem, idx: number) => (
-          <DropdownListItem
-            key={idx}
-            item={item}
-            onEditItem={(newTitle: string) => handleEditItem(item, newTitle)}
-          />
-        ))}
-      </DropdownList>
-    ));
-
-    return (
-      <div>
-        {renderedLists}
-        <AddListSection />
-      </div>
-    );
   };
 
   return (
@@ -118,7 +30,9 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>{getPageContent()}</IonContent>
+      <IonContent fullscreen>
+        <MainPageContent />
+      </IonContent>
     </IonPage>
   );
 };
