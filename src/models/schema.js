@@ -120,6 +120,13 @@ export const schema = {
                         "targetName": "listItemParentListId"
                     }
                 },
+                "indexInList": {
+                    "name": "indexInList",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -177,5 +184,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "725aca8a3790552c87f33fc69e24703a"
+    "version": "ceb4c67f0eb11a3b3717714b290fcd94"
 };

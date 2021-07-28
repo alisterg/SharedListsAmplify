@@ -10,5 +10,6 @@ type ListItem @model @key(name: "byList", fields: ["listID"]) @auth(rules: [{all
   isComplete: Boolean
   listID: ID
   parentList: List @connection
+  indexInList: Int
 }
  

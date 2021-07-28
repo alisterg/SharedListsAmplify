@@ -20,6 +20,7 @@ export declare class ListItem {
   readonly isComplete?: boolean;
   readonly listID?: string;
   readonly parentList?: List;
+  readonly indexInList?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<ListItem>);
