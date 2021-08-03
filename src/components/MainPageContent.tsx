@@ -16,15 +16,15 @@ const MainPageContent: React.FC = () => {
   const [sortedItems, setSortedItems] = useState<sortedItemsType>();
 
   useEffect(() => {
-    fetchLists();
-    fetchItems();
+    fetchLists().then();
+    fetchItems().then();
 
     const listsSubscription = DataStore.observe(List).subscribe(() => {
-      fetchLists();
+      fetchLists().then();
     });
 
     const itemsSubscription = DataStore.observe(ListItem).subscribe(() => {
-      fetchItems();
+      fetchItems().then();
     });
 
     return () => {
@@ -41,10 +41,12 @@ const MainPageContent: React.FC = () => {
   const fetchItems = async () => {
     const itemsResult = await DataStore.query(ListItem);
     setItems(itemsResult);
-    setSortedItems(getSortedItems(itemsResult));
+
+    const sortedItems = sortItemsFromAll(itemsResult);
+    setSortedItems(sortedItems);
   };
 
-  const getSortedItems = (allItems: ListItem[]): sortedItemsType => {
+  const sortItemsFromAll = (allItems: ListItem[]): sortedItemsType => {
     let result: sortedItemsType = {};
 
     for (let i of allItems) {
@@ -69,7 +71,7 @@ const MainPageContent: React.FC = () => {
       })
     ); // Could play a saving animation here
 
-    fetchItems();
+    await fetchItems();
   };
 
   const handleEditList = async (list: List, newTitle: string) => {
@@ -79,7 +81,7 @@ const MainPageContent: React.FC = () => {
       })
     ); // Could play a saving animation here
 
-    fetchItems();
+    await fetchItems();
   };
 
   const handleDragEnd = async (result: any) => {
@@ -119,7 +121,33 @@ const MainPageContent: React.FC = () => {
     ...draggableStyle,
   });
 
-  if (!lists || !items) return <div>TODO: Show empty state</div>;
+  const getListChildren = (list: List) => {
+    if (!sortedItems || !sortedItems[list.id]) return <></>;
+
+    return sortedItems[list.id].map((item: ListItem, idx: number) => (
+      <Draggable key={item.id} draggableId={"drag-" + item.id} index={idx}>
+        {(providedItem, snapshotItem) => (
+          <div
+            ref={providedItem.innerRef}
+            {...providedItem.draggableProps}
+            {...providedItem.dragHandleProps}
+            style={getItemStyle(
+              snapshotItem.isDragging,
+              providedItem.draggableProps.style
+            )}
+          >
+            <DropdownListItem
+              key={idx}
+              item={item}
+              onEditItem={(newTitle: string) => handleEditItem(item, newTitle)}
+            />
+          </div>
+        )}
+      </Draggable>
+    ));
+  };
+
+  if (!lists || !sortedItems) return <div>TODO: Show empty state</div>;
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -132,33 +160,7 @@ const MainPageContent: React.FC = () => {
                 isDraggingOver={snapshot.isDraggingOver}
                 onEditName={(newName: string) => handleEditList(list, newName)}
               >
-                {sortedItems![list.id].map((item: ListItem, idx: number) => (
-                  <Draggable
-                    key={item.id}
-                    draggableId={"drag-" + item.id}
-                    index={idx}
-                  >
-                    {(providedItem, snapshotItem) => (
-                      <div
-                        ref={providedItem.innerRef}
-                        {...providedItem.draggableProps}
-                        {...providedItem.dragHandleProps}
-                        style={getItemStyle(
-                          snapshotItem.isDragging,
-                          providedItem.draggableProps.style
-                        )}
-                      >
-                        <DropdownListItem
-                          key={idx}
-                          item={item}
-                          onEditItem={(newTitle: string) =>
-                            handleEditItem(item, newTitle)
-                          }
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                {getListChildren(list)}
                 {provided.placeholder}
               </DropdownList>
             </div>
