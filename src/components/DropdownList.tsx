@@ -16,11 +16,17 @@ import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
 
 interface Props {
   list: List;
+  isDraggingOver: boolean;
   children: ReactNode[];
   onEditName: Function;
 }
 
-const DropdownList: React.FC<Props> = ({ list, children, onEditName }) => {
+const DropdownList: React.FC<Props> = ({
+  list,
+  isDraggingOver,
+  children,
+  onEditName,
+}) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [newTitle, setNewTitle] = useState(list.name);
   const [isCurrentlyEditing, setIsCurrentlyEditing] = useState(false);
@@ -36,7 +42,7 @@ const DropdownList: React.FC<Props> = ({ list, children, onEditName }) => {
   };
 
   return (
-    <IonCard>
+    <IonCard color={isDraggingOver ? "light" : "none"}>
       <IonCardHeader>
         <IonItem lines="none" color="none">
           <IonButtons slot="start">

@@ -113,14 +113,9 @@ const MainPageContent: React.FC = () => {
     );
   };
 
-  const getListStyle = (isDraggingOver: any) => ({
-    background: isDraggingOver ? "blue" : "",
-  });
-
   const getItemStyle = (isDragging: any, draggableStyle: any) => ({
     userSelect: "none",
-    boxShadow: isDragging ? "0px 0px 6px 2px rgba(156,156,156,1)" : "none",
-    borderRadius: isDragging ? "5px" : "none",
+    boxShadow: isDragging ? "0px 0px 6px 1px rgba(156,156,156,1)" : "none",
     ...draggableStyle,
   });
 
@@ -131,13 +126,10 @@ const MainPageContent: React.FC = () => {
       {lists.map((list) => (
         <Droppable droppableId={"drop-" + list.id} key={list.id}>
           {(provided, snapshot) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={getListStyle(snapshot.isDraggingOver)}
-            >
+            <div {...provided.droppableProps} ref={provided.innerRef}>
               <DropdownList
                 list={list}
+                isDraggingOver={snapshot.isDraggingOver}
                 onEditName={(newName: string) => handleEditList(list, newName)}
               >
                 {sortedItems![list.id].map((item: ListItem, idx: number) => (
