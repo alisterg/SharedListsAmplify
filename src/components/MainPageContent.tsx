@@ -6,6 +6,7 @@ import DropdownListItem from "./DropdownListItem";
 import AddListSection from "./AddListSection";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import cloneDeep from "lodash/cloneDeep";
+import AddItemSection from "./AddItemSection";
 
 type sortedItemsType = { [listId: string]: ListItem[] };
 
@@ -93,26 +94,53 @@ const MainPageContent: React.FC = () => {
       (i) => i.id === result.draggableId.replace("drag-", "")
     );
 
-    console.log("saving to: ", result.destination.index);
-
+    const sourceListId = result.source.droppableId.replace("drop-", "");
     const destListId = result.destination.droppableId.replace("drop-", "");
 
-    // reorder every item in list
-    // const itemOrderClone = ;
-    // const [removed] = itemOrderClone.splice(result.source.index, 1);
-    // itemOrderClone.splice(result.destination.index, 0, removed);
-    const itemsInList = cloneDeep(sortedItems![destListId]);
-    // TODO: check whether the source and dest lists are the same
-    // if so, only need to sort the current list
-    // else, need to resort both lists
-    // is there a more performant way to do it?
+    // TODO: refactor
+    if (sourceListId === destListId) {
+      const itemsInList = cloneDeep(sortedItems![destListId]);
 
-    await DataStore.save(
-      ListItem.copyOf(itemDropping!, (updated) => {
-        updated.listID = destListId || itemDropping!.listID;
-        updated.indexInList = result.destination.index;
-      })
-    );
+      const [removed] = itemsInList.splice(result.source.index, 1);
+      itemsInList.splice(result.destination.index, 0, removed);
+
+      itemsInList.forEach((i, idx) => {
+        console.log(`Setting ${i.title} to ${idx}`);
+
+        DataStore.save(
+          ListItem.copyOf(i, (updated) => {
+            updated.listID = destListId || itemDropping!.listID;
+            updated.indexInList = idx;
+          })
+        );
+      });
+    } else {
+      const itemsInSourceList = cloneDeep(sortedItems![sourceListId]);
+      let itemsInDestList = cloneDeep(sortedItems![destListId]);
+
+      if (!itemsInDestList) itemsInDestList = [];
+
+      const [removed] = itemsInSourceList.splice(result.source.index, 1);
+      itemsInDestList.splice(result.destination.index, 0, removed);
+
+      itemsInSourceList.forEach((i, idx) => {
+        DataStore.save(
+          ListItem.copyOf(i, (updated) => {
+            updated.listID = sourceListId || itemDropping!.listID;
+            updated.indexInList = idx;
+          })
+        );
+      });
+
+      itemsInDestList.forEach((i, idx) => {
+        DataStore.save(
+          ListItem.copyOf(i, (updated) => {
+            updated.listID = destListId || itemDropping!.listID;
+            updated.indexInList = idx;
+          })
+        );
+      });
+    }
   };
 
   const getItemStyle = (isDragging: any, draggableStyle: any) => ({
@@ -121,7 +149,7 @@ const MainPageContent: React.FC = () => {
     ...draggableStyle,
   });
 
-  const getListChildren = (list: List) => {
+  const renderListChildren = (list: List) => {
     if (!sortedItems || !sortedItems[list.id]) return <></>;
 
     return sortedItems[list.id].map((item: ListItem, idx: number) => (
@@ -160,8 +188,17 @@ const MainPageContent: React.FC = () => {
                 isDraggingOver={snapshot.isDraggingOver}
                 onEditName={(newName: string) => handleEditList(list, newName)}
               >
-                {getListChildren(list)}
+                {renderListChildren(list)}
                 {provided.placeholder}
+
+                <AddItemSection
+                  list={list}
+                  itemCount={
+                    sortedItems.hasOwnProperty(list.id)
+                      ? sortedItems[list.id].length
+                      : 0
+                  }
+                />
               </DropdownList>
             </div>
           )}

@@ -11,7 +11,6 @@ import {
   IonInput,
   IonItem,
 } from "@ionic/react";
-import AddItemSection from "./AddItemSection";
 import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
 
 interface Props {
@@ -69,8 +68,6 @@ const DropdownList: React.FC<Props> = ({
       {isExpanded && (
         <IonCardContent>
           {children}
-
-          <AddItemSection list={list} />
         </IonCardContent>
       )}
     </IonCard>

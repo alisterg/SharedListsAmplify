@@ -6,9 +6,10 @@ import { DataStore } from "@aws-amplify/datastore";
 
 interface Props {
   list: List;
+  itemCount: number;
 }
 
-const AddItemSection: React.FC<Props> = ({ list }) => {
+const AddItemSection: React.FC<Props> = ({ list, itemCount }) => {
   const [quickAddInp, setQuickAddInp] = useState("");
 
   const handleAddItemClick = async () => {
@@ -16,6 +17,7 @@ const AddItemSection: React.FC<Props> = ({ list }) => {
       new ListItem({
         title: quickAddInp,
         listID: list.id,
+        indexInList: itemCount,
       })
     );
 
