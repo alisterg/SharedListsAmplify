@@ -1,26 +1,14 @@
 import React, { useState } from "react";
-import { List, ListItem } from "../models";
+import { List } from "../../models";
 import { IonButton, IonIcon, IonInput, IonItem } from "@ionic/react";
 import { add, arrowForward } from "ionicons/icons";
 import { DataStore } from "@aws-amplify/datastore";
 
-interface Props {
-  list: List;
-  itemCount: number;
-}
-
-const AddItemSection: React.FC<Props> = ({ list, itemCount }) => {
+const AddListSection: React.FC = () => {
   const [quickAddInp, setQuickAddInp] = useState("");
 
-  const handleAddItemClick = async () => {
-    await DataStore.save(
-      new ListItem({
-        title: quickAddInp,
-        listID: list.id,
-        indexInList: itemCount,
-      })
-    );
-
+  const handleAddListClick = async () => {
+    await DataStore.save(new List({ name: quickAddInp }));
     setQuickAddInp("");
   };
 
@@ -32,11 +20,11 @@ const AddItemSection: React.FC<Props> = ({ list, itemCount }) => {
         autocapitalize="on"
         autocorrect="on"
         value={quickAddInp}
-        placeholder="Add item..."
+        placeholder="Add category..."
         onIonChange={(e) => setQuickAddInp(e.detail.value!)}
       />
       {quickAddInp && (
-        <IonButton fill="clear" onClick={handleAddItemClick}>
+        <IonButton fill="clear" onClick={handleAddListClick}>
           <IonIcon icon={arrowForward} color="primary" />
         </IonButton>
       )}
@@ -44,4 +32,4 @@ const AddItemSection: React.FC<Props> = ({ list, itemCount }) => {
   );
 };
 
-export default AddItemSection;
+export default AddListSection;

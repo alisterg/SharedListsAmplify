@@ -1,0 +1,23 @@
+.bgGreen {
+  background: #2dd36f;
+}
+
+.signoutButton {
+  padding: 0.3em;
+  font-size: 0.9em;
+  background: var(--ion-color-primary);
+}
+
+ion-item {
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  --background: none;
+}
+
+.item {
+  user-select: none;
+}
+.dragging {
+  box-shadow: 0 0 6px 1px rgba(156, 156, 156, 1);
+}

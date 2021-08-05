@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { ListItem } from "../models";
-import "../styles.css";
+import { ListItem } from "../../models";
+import styles from "../styles.module.css";
 import {IonIcon, IonInput, IonItem} from "@ionic/react";
 import {reorderTwoOutline} from "ionicons/icons";
 
@@ -28,7 +28,7 @@ const DropdownListItem: React.FC<Props> = ({ item, onEditItem }) => {
       <IonInput
         onClick={handleSetEditing}
         ref={inputRefEle}
-        className={isCurrentlyEditing ? "bg-green" : ""}
+        className={isCurrentlyEditing ? styles.bgGreen : ""}
         value={newTitle}
         onIonChange={(e) => setNewTitle(e.detail.value!)}
         onIonFocus={() => setIsCurrentlyEditing(true)}

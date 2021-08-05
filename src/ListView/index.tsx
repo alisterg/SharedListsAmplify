@@ -9,9 +9,10 @@ import {
 import React from "react";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { Auth } from "aws-amplify";
-import MainPageContent from "../components/MainPageContent";
+import ListViewContent from "./ListViewContent";
+import styles from "./styles.module.css";
 
-const Home: React.FC = () => {
+const ListView: React.FC = () => {
   const handleSignOutClick = async () => {
     await Auth.signOut();
     window.location.reload();
@@ -22,8 +23,8 @@ const Home: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>🍍 Go Shop 🍉</IonTitle>
-          <IonButtons slot="end" className="signout-button">
-            <div onClick={handleSignOutClick} className="signout-button">
+          <IonButtons slot="end" className={styles.signoutButton}>
+            <div onClick={handleSignOutClick} className={styles.signoutButton}>
               Sign Out
             </div>
           </IonButtons>
@@ -31,10 +32,10 @@ const Home: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <MainPageContent />
+        <ListViewContent />
       </IonContent>
     </IonPage>
   );
 };
 
-export default withAuthenticator(Home);
+export default withAuthenticator(ListView);

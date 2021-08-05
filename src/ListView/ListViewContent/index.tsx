@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { List, ListItem } from "../models";
+import { List, ListItem } from "../../models";
 import { DataStore } from "@aws-amplify/datastore";
 import DropdownList from "./DropdownList";
 import DropdownListItem from "./DropdownListItem";
@@ -7,13 +7,12 @@ import AddListSection from "./AddListSection";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import cloneDeep from "lodash/cloneDeep";
 import AddItemSection from "./AddItemSection";
+import styles from "../styles.module.css";
 
 type sortedItemsType = { [listId: string]: ListItem[] };
 
-const MainPageContent: React.FC = () => {
+const ListViewContent: React.FC = () => {
   const [lists, setLists] = useState<List[]>();
-  const [items, setItems] = useState<ListItem[]>();
-
   const [sortedItems, setSortedItems] = useState<sortedItemsType>();
 
   useEffect(() => {
@@ -41,28 +40,24 @@ const MainPageContent: React.FC = () => {
 
   const fetchItems = async () => {
     const itemsResult = await DataStore.query(ListItem);
-    setItems(itemsResult);
 
-    const sortedItems = sortItemsFromAll(itemsResult);
-    setSortedItems(sortedItems);
-  };
+    let sortedItems: sortedItemsType = {};
 
-  const sortItemsFromAll = (allItems: ListItem[]): sortedItemsType => {
-    let result: sortedItemsType = {};
-
-    for (let i of allItems) {
+    for (let i of itemsResult) {
       if (i.listID === undefined) continue;
-      if (!result[i.listID]) result[i.listID] = [];
+      if (!sortedItems[i.listID]) sortedItems[i.listID] = [];
 
       const itemClone = cloneDeep(i);
-      result[i.listID].push(itemClone);
+      sortedItems[i.listID].push(itemClone);
     }
 
-    for (let l in result) {
-      result[l].sort((a, b) => (a.indexInList || 0) - (b.indexInList || 0));
+    for (let l in sortedItems) {
+      sortedItems[l].sort(
+        (a, b) => (a.indexInList || 0) - (b.indexInList || 0)
+      );
     }
 
-    return result;
+    setSortedItems(sortedItems);
   };
 
   const handleEditItem = async (item: ListItem, newTitle: string) => {
@@ -90,10 +85,6 @@ const MainPageContent: React.FC = () => {
       return; // dropped outside the list
     }
 
-    const itemDropping = items!.find(
-      (i) => i.id === result.draggableId.replace("drag-", "")
-    );
-
     const sourceListId = result.source.droppableId.replace("drop-", "");
     const destListId = result.destination.droppableId.replace("drop-", "");
 
@@ -109,7 +100,7 @@ const MainPageContent: React.FC = () => {
 
         DataStore.save(
           ListItem.copyOf(i, (updated) => {
-            updated.listID = destListId || itemDropping!.listID;
+            updated.listID = destListId;
             updated.indexInList = idx;
           })
         );
@@ -126,7 +117,7 @@ const MainPageContent: React.FC = () => {
       itemsInSourceList.forEach((i, idx) => {
         DataStore.save(
           ListItem.copyOf(i, (updated) => {
-            updated.listID = sourceListId || itemDropping!.listID;
+            updated.listID = sourceListId;
             updated.indexInList = idx;
           })
         );
@@ -135,19 +126,13 @@ const MainPageContent: React.FC = () => {
       itemsInDestList.forEach((i, idx) => {
         DataStore.save(
           ListItem.copyOf(i, (updated) => {
-            updated.listID = destListId || itemDropping!.listID;
+            updated.listID = destListId;
             updated.indexInList = idx;
           })
         );
       });
     }
   };
-
-  const getItemStyle = (isDragging: any, draggableStyle: any) => ({
-    userSelect: "none",
-    boxShadow: isDragging ? "0px 0px 6px 1px rgba(156,156,156,1)" : "none",
-    ...draggableStyle,
-  });
 
   const renderListChildren = (list: List) => {
     if (!sortedItems || !sortedItems[list.id]) return <></>;
@@ -159,10 +144,10 @@ const MainPageContent: React.FC = () => {
             ref={providedItem.innerRef}
             {...providedItem.draggableProps}
             {...providedItem.dragHandleProps}
-            style={getItemStyle(
-              snapshotItem.isDragging,
-              providedItem.draggableProps.style
-            )}
+            style={providedItem.draggableProps.style}
+            className={`${styles.item} ${
+              snapshotItem.isDragging ? styles.dragging : ""
+            }`}
           >
             <DropdownListItem
               key={idx}
@@ -209,4 +194,4 @@ const MainPageContent: React.FC = () => {
   );
 };
 
-export default MainPageContent;
+export default ListViewContent;
