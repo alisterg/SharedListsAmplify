@@ -42,14 +42,15 @@ const DropdownList: React.FC<Props> = ({
   return (
     <IonCard color={isDraggingOver ? "light" : "none"}>
       <div className={styles.cardHeader}>
+        <IonButtons slot="start" style={{ marginRight: 4 }}>
+          <IonButton onClick={() => setIsExpanded(!isExpanded)}>
+            <IonIcon
+              icon={isExpanded ? chevronDownOutline : chevronForwardOutline}
+            />
+          </IonButton>
+        </IonButtons>
+
         <IonItem lines="none" color="none">
-          <IonButtons slot="start">
-            <IonButton onClick={() => setIsExpanded(!isExpanded)}>
-              <IonIcon
-                icon={isExpanded ? chevronDownOutline : chevronForwardOutline}
-              />
-            </IonButton>
-          </IonButtons>
           <IonCardTitle>
             <IonInput
               onClick={handleSetEditing}

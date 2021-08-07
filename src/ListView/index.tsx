@@ -11,7 +11,11 @@ import React, { useState } from "react";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { Auth, DataStore } from "aws-amplify";
 import ListViewContent from "./ListViewContent";
-import {checkmarkCircleOutline, ellipseOutline, logOutOutline} from "ionicons/icons";
+import {
+  checkmarkCircleOutline,
+  ellipseOutline,
+  logOutOutline,
+} from "ionicons/icons";
 
 const ListView: React.FC = () => {
   const [showingComplete, setShowingComplete] = useState(true);
@@ -46,8 +50,10 @@ const ListView: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
-        <ListViewContent showingComplete={showingComplete} />
+      <IonContent fullscreen scrollY={false}>
+        <div style={{ overflow: "scroll", height: "100%" }}>
+          <ListViewContent showingComplete={showingComplete} />
+        </div>
       </IonContent>
     </IonPage>
   );

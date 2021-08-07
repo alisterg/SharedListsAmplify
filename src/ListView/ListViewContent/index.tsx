@@ -132,20 +132,44 @@ const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
     }
   };
 
+  /**
+   * NOTE:
+   * This fixes the issue where item renders in the wrong position while dragging
+   * https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/guides/reparenting.md
+   */
+  const getRenderItem =
+    (listId: string) => (provided: any, snapshot: any, rubric: any) => {
+      const itemsForList = sortedItems![listId];
+      const item = itemsForList[rubric.source.index];
+
+      return (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          style={provided.draggableProps.style}
+          className={snapshot.isDragging ? styles.dragging : ""}
+        >
+          <DropdownListItem
+            key={item.id}
+            item={item}
+            onEditItem={() => null}
+            onToggleItemComplete={() => null}
+          />
+        </div>
+      );
+    };
+
   const renderListChildren = (list: List) => {
     if (!sortedItems || !sortedItems[list.id]) return <></>;
 
     return sortedItems[list.id].map((item: ListItem, idx: number) => (
       <Draggable key={item.id} draggableId={"drag-" + item.id} index={idx}>
-        {(providedItem, snapshotItem) => (
+        {(providedItem) => (
           <div
             ref={providedItem.innerRef}
             {...providedItem.draggableProps}
             {...providedItem.dragHandleProps}
-            style={providedItem.draggableProps.style}
-            className={`${styles.item} ${
-              snapshotItem.isDragging ? styles.dragging : ""
-            }`}
           >
             {!showingComplete && item.isComplete ? (
               <></>
@@ -170,7 +194,11 @@ const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       {lists.map((list) => (
-        <Droppable droppableId={"drop-" + list.id} key={list.id}>
+        <Droppable
+          droppableId={"drop-" + list.id}
+          key={list.id}
+          renderClone={getRenderItem(list.id)}
+        >
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               <DropdownList
