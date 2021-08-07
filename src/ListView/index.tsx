@@ -8,12 +8,13 @@ import {
 } from "@ionic/react";
 import React from "react";
 import { withAuthenticator } from "@aws-amplify/ui-react";
-import { Auth } from "aws-amplify";
+import { Auth, DataStore } from "aws-amplify";
 import ListViewContent from "./ListViewContent";
 import styles from "./styles.module.css";
 
 const ListView: React.FC = () => {
   const handleSignOutClick = async () => {
+    await DataStore.clear();
     await Auth.signOut();
     window.location.reload();
   };
@@ -23,7 +24,7 @@ const ListView: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>🍍 Go Shop 🍉</IonTitle>
-          <IonButtons slot="end" className={styles.signoutButton}>
+          <IonButtons slot="end">
             <div onClick={handleSignOutClick} className={styles.signoutButton}>
               Sign Out
             </div>

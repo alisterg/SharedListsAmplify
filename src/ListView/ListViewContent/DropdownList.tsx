@@ -4,14 +4,13 @@ import {
   IonButton,
   IonButtons,
   IonCard,
-  IonCardContent,
-  IonCardHeader,
   IonCardTitle,
   IonIcon,
   IonInput,
   IonItem,
 } from "@ionic/react";
 import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
+import styles from "../styles.module.css";
 
 interface Props {
   list: List;
@@ -31,7 +30,7 @@ const DropdownList: React.FC<Props> = ({
   const [isCurrentlyEditing, setIsCurrentlyEditing] = useState(false);
   const inputRefEle = useRef<HTMLIonInputElement>(null);
 
-  const handleSetEditing = (e: React.MouseEvent) => {
+  const handleSetEditing = () => {
     inputRefEle.current!.focus();
   };
 
@@ -42,7 +41,7 @@ const DropdownList: React.FC<Props> = ({
 
   return (
     <IonCard color={isDraggingOver ? "light" : "none"}>
-      <IonCardHeader>
+      <div className={styles.cardHeader}>
         <IonItem lines="none" color="none">
           <IonButtons slot="start">
             <IonButton onClick={() => setIsExpanded(!isExpanded)}>
@@ -55,7 +54,7 @@ const DropdownList: React.FC<Props> = ({
             <IonInput
               onClick={handleSetEditing}
               ref={inputRefEle}
-              className={isCurrentlyEditing ? "bg-green" : ""}
+              className={isCurrentlyEditing ? styles.inputEditing : ""}
               value={newTitle}
               onIonChange={(e) => setNewTitle(e.detail.value!)}
               onIonFocus={() => setIsCurrentlyEditing(true)}
@@ -63,13 +62,9 @@ const DropdownList: React.FC<Props> = ({
             />
           </IonCardTitle>
         </IonItem>
-      </IonCardHeader>
+      </div>
 
-      {isExpanded && (
-        <IonCardContent>
-          {children}
-        </IonCardContent>
-      )}
+      {isExpanded && <div className={styles.cardContent}>{children}</div>}
     </IonCard>
   );
 };

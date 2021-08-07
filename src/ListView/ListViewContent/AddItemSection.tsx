@@ -32,7 +32,6 @@ const AddItemSection: React.FC<Props> = ({ list, itemCount }) => {
         autocapitalize="on"
         autocorrect="on"
         value={quickAddInp}
-        placeholder="Add item..."
         onIonChange={(e) => setQuickAddInp(e.detail.value!)}
       />
       {quickAddInp && (

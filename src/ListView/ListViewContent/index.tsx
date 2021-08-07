@@ -81,30 +81,29 @@ const ListViewContent: React.FC = () => {
   };
 
   const handleDragEnd = async (result: any) => {
-    if (!result.destination) {
-      return; // dropped outside the list
-    }
+    if (!result.destination) return;
+
+    const saveReorderedItems = (itemsInList: ListItem[], listId: string) => {
+      itemsInList.forEach((i, idx) => {
+        DataStore.save(
+          ListItem.copyOf(i, (updated) => {
+            updated.listID = listId;
+            updated.indexInList = idx;
+          })
+        );
+      });
+    };
 
     const sourceListId = result.source.droppableId.replace("drop-", "");
     const destListId = result.destination.droppableId.replace("drop-", "");
 
-    // TODO: refactor
     if (sourceListId === destListId) {
       const itemsInList = cloneDeep(sortedItems![destListId]);
 
       const [removed] = itemsInList.splice(result.source.index, 1);
       itemsInList.splice(result.destination.index, 0, removed);
 
-      itemsInList.forEach((i, idx) => {
-        console.log(`Setting ${i.title} to ${idx}`);
-
-        DataStore.save(
-          ListItem.copyOf(i, (updated) => {
-            updated.listID = destListId;
-            updated.indexInList = idx;
-          })
-        );
-      });
+      saveReorderedItems(itemsInList, destListId);
     } else {
       const itemsInSourceList = cloneDeep(sortedItems![sourceListId]);
       let itemsInDestList = cloneDeep(sortedItems![destListId]);
@@ -114,23 +113,8 @@ const ListViewContent: React.FC = () => {
       const [removed] = itemsInSourceList.splice(result.source.index, 1);
       itemsInDestList.splice(result.destination.index, 0, removed);
 
-      itemsInSourceList.forEach((i, idx) => {
-        DataStore.save(
-          ListItem.copyOf(i, (updated) => {
-            updated.listID = sourceListId;
-            updated.indexInList = idx;
-          })
-        );
-      });
-
-      itemsInDestList.forEach((i, idx) => {
-        DataStore.save(
-          ListItem.copyOf(i, (updated) => {
-            updated.listID = destListId;
-            updated.indexInList = idx;
-          })
-        );
-      });
+      saveReorderedItems(itemsInSourceList, sourceListId);
+      saveReorderedItems(itemsInDestList, destListId);
     }
   };
 

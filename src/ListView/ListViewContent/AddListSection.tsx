@@ -3,6 +3,7 @@ import { List } from "../../models";
 import { IonButton, IonIcon, IonInput, IonItem } from "@ionic/react";
 import { add, arrowForward } from "ionicons/icons";
 import { DataStore } from "@aws-amplify/datastore";
+import styles from "../styles.module.css";
 
 const AddListSection: React.FC = () => {
   const [quickAddInp, setQuickAddInp] = useState("");
@@ -13,14 +14,14 @@ const AddListSection: React.FC = () => {
   };
 
   return (
-    <IonItem>
+    <IonItem className={styles.addList}>
       <IonIcon icon={add} slot="start" color="tertiary" />
       <IonInput
         maxlength={50}
         autocapitalize="on"
         autocorrect="on"
         value={quickAddInp}
-        placeholder="Add category..."
+        placeholder="New category..."
         onIonChange={(e) => setQuickAddInp(e.detail.value!)}
       />
       {quickAddInp && (
