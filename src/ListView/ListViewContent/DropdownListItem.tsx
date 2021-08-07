@@ -2,14 +2,23 @@ import React, { useRef, useState } from "react";
 import { ListItem } from "../../models";
 import styles from "../styles.module.css";
 import { IonIcon, IonInput, IonItem } from "@ionic/react";
-import { reorderTwoOutline } from "ionicons/icons";
+import {
+  checkmarkCircleOutline,
+  ellipseOutline,
+  reorderTwoOutline,
+} from "ionicons/icons";
 
 interface Props {
   item: ListItem;
   onEditItem: Function;
+  onToggleItemComplete: Function;
 }
 
-const DropdownListItem: React.FC<Props> = ({ item, onEditItem }) => {
+const DropdownListItem: React.FC<Props> = ({
+  item,
+  onEditItem,
+  onToggleItemComplete,
+}) => {
   const [newTitle, setNewTitle] = useState(item?.title);
   const [isCurrentlyEditing, setIsCurrentlyEditing] = useState(false);
   const inputRefEle = useRef<HTMLIonInputElement>(null);
@@ -25,6 +34,13 @@ const DropdownListItem: React.FC<Props> = ({ item, onEditItem }) => {
 
   return (
     <IonItem mode="ios" lines="none">
+      <IonIcon
+        style={{ paddingTop: "2px" }}
+        slot="start"
+        color={item.isComplete ? "primary" : "medium"}
+        icon={item.isComplete ? checkmarkCircleOutline : ellipseOutline}
+        onClick={() => onToggleItemComplete()}
+      />
       <IonInput
         onClick={handleSetEditing}
         ref={inputRefEle}

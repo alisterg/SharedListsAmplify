@@ -9,9 +9,13 @@ import cloneDeep from "lodash/cloneDeep";
 import AddItemSection from "./AddItemSection";
 import styles from "../styles.module.css";
 
+interface Props {
+  showingComplete: boolean;
+}
+
 type sortedItemsType = { [listId: string]: ListItem[] };
 
-const ListViewContent: React.FC = () => {
+const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
   const [lists, setLists] = useState<List[]>();
   const [sortedItems, setSortedItems] = useState<sortedItemsType>();
 
@@ -66,6 +70,16 @@ const ListViewContent: React.FC = () => {
         updated.title = newTitle;
       })
     ); // Could play a saving animation here
+
+    await fetchItems();
+  };
+
+  const handleToggleItemComplete = async (item: ListItem) => {
+    await DataStore.save(
+      ListItem.copyOf(item, (updated) => {
+        updated.isComplete = !item.isComplete;
+      })
+    );
 
     await fetchItems();
   };
@@ -133,11 +147,18 @@ const ListViewContent: React.FC = () => {
               snapshotItem.isDragging ? styles.dragging : ""
             }`}
           >
-            <DropdownListItem
-              key={idx}
-              item={item}
-              onEditItem={(newTitle: string) => handleEditItem(item, newTitle)}
-            />
+            {!showingComplete && item.isComplete ? (
+              <></>
+            ) : (
+              <DropdownListItem
+                key={idx}
+                item={item}
+                onEditItem={(newTitle: string) =>
+                  handleEditItem(item, newTitle)
+                }
+                onToggleItemComplete={() => handleToggleItemComplete(item)}
+              />
+            )}
           </div>
         )}
       </Draggable>
