@@ -1,6 +1,9 @@
 import {
   IonButtons,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonFabList,
   IonHeader,
   IonIcon,
   IonPage,
@@ -15,7 +18,9 @@ import {
   checkmarkCircleOutline,
   ellipseOutline,
   logOutOutline,
+  settings,
 } from "ionicons/icons";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 const ListView: React.FC = () => {
   const [showingComplete, setShowingComplete] = useState(true);
@@ -26,26 +31,44 @@ const ListView: React.FC = () => {
     window.location.reload();
   };
 
+  const handleToggleComplete = async () => {
+    await Haptics.impact({ style: ImpactStyle.Medium });
+    setShowingComplete(!showingComplete);
+  };
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonIcon
-              size="large"
-              icon={showingComplete ? checkmarkCircleOutline : ellipseOutline}
-              color={showingComplete ? "primary" : "medium"}
-              onClick={() => setShowingComplete(!showingComplete)}
-            />
-          </IonButtons>
           <IonTitle>🍍 Go Shop 🍉</IonTitle>
           <IonButtons slot="end">
-            <IonIcon
-              size="large"
-              color="danger"
-              icon={logOutOutline}
-              onClick={handleSignOutClick}
-            />
+            <IonFab horizontal="end" vertical="top" slot="fixed" edge>
+              <IonFabButton
+                mode="ios"
+                color="primary"
+                onClick={() => Haptics.impact({ style: ImpactStyle.Light })}
+              >
+                <IonIcon className="white-color" icon={settings} size="small" />
+              </IonFabButton>
+              <IonFabList>
+                <IonFabButton>
+                  <IonIcon
+                    icon={
+                      showingComplete ? checkmarkCircleOutline : ellipseOutline
+                    }
+                    color={showingComplete ? "primary" : "medium"}
+                    onClick={handleToggleComplete}
+                  />
+                </IonFabButton>
+                <IonFabButton>
+                  <IonIcon
+                    color="danger"
+                    icon={logOutOutline}
+                    onClick={handleSignOutClick}
+                  />
+                </IonFabButton>
+              </IonFabList>
+            </IonFab>
           </IonButtons>
         </IonToolbar>
       </IonHeader>

@@ -4,12 +4,16 @@ import { IonButton, IonIcon, IonInput, IonItem } from "@ionic/react";
 import { add, arrowForward } from "ionicons/icons";
 import { DataStore } from "@aws-amplify/datastore";
 import styles from "../styles.module.css";
+import { Keyboard } from "@capacitor/keyboard";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 const AddListSection: React.FC = () => {
   const [quickAddInp, setQuickAddInp] = useState("");
 
   const handleAddListClick = async () => {
     await DataStore.save(new List({ name: quickAddInp }));
+    await Keyboard.hide();
+    await Haptics.impact({ style: ImpactStyle.Medium });
     setQuickAddInp("");
   };
 

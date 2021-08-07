@@ -8,6 +8,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import cloneDeep from "lodash/cloneDeep";
 import AddItemSection from "./AddItemSection";
 import styles from "../styles.module.css";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 interface Props {
   showingComplete: boolean;
@@ -81,6 +82,7 @@ const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
       })
     );
 
+    await Haptics.impact({ style: ImpactStyle.Medium });
     await fetchItems();
   };
 
@@ -92,6 +94,10 @@ const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
     ); // Could play a saving animation here
 
     await fetchItems();
+  };
+
+  const handleDragStart = async () => {
+    await Haptics.impact({ style: ImpactStyle.Light });
   };
 
   const handleDragEnd = async (result: any) => {
@@ -192,7 +198,7 @@ const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
   if (!lists || !sortedItems) return <div>TODO: Show empty state</div>;
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
+    <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       {lists.map((list) => (
         <Droppable
           droppableId={"drop-" + list.id}

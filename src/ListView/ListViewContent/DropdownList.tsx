@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
 import styles from "../styles.module.css";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 interface Props {
   list: List;
@@ -39,11 +40,16 @@ const DropdownList: React.FC<Props> = ({
     onEditName(newTitle);
   };
 
+  const handleToggleExpand = async () => {
+    setIsExpanded(!isExpanded);
+    await Haptics.impact({ style: ImpactStyle.Medium });
+  };
+
   return (
     <IonCard color={isDraggingOver ? "light" : "none"}>
       <div className={styles.cardHeader}>
         <IonButtons slot="start" style={{ marginRight: 4 }}>
-          <IonButton onClick={() => setIsExpanded(!isExpanded)}>
+          <IonButton onClick={handleToggleExpand}>
             <IonIcon
               icon={isExpanded ? chevronDownOutline : chevronForwardOutline}
             />

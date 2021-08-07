@@ -3,6 +3,8 @@ import { List, ListItem } from "../../models";
 import { IonButton, IonIcon, IonInput, IonItem } from "@ionic/react";
 import { add, arrowForward } from "ionicons/icons";
 import { DataStore } from "@aws-amplify/datastore";
+import { Keyboard } from "@capacitor/keyboard";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 interface Props {
   list: List;
@@ -21,6 +23,8 @@ const AddItemSection: React.FC<Props> = ({ list, itemCount }) => {
       })
     );
 
+    await Keyboard.hide();
+    await Haptics.impact({ style: ImpactStyle.Medium });
     setQuickAddInp("");
   };
 
