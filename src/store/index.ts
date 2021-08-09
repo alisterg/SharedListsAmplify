@@ -5,12 +5,18 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import settingsReducer from "./settings";
+import itemsReducer from "./items";
 import { STORAGE_SETTING_REDUX } from "../Constants";
 
 const storeOptions: ConfigureStoreOptions = {
   reducer: {
     settings: settingsReducer,
+    items: itemsReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 };
 
 const storage = localStorage.getItem(STORAGE_SETTING_REDUX);

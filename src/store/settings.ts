@@ -27,8 +27,7 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { toggleShowingComplete, setLoggedOut } =
-  settingsSlice.actions;
+export const { toggleShowingComplete, setLoggedOut } = settingsSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -42,5 +41,6 @@ export const logoutAsync = (): AppThunk => async (dispatch) => {
   window.location.reload();
 };
 
-export const selectSettings = (state: RootState) => state.settings;
+export const selectShowingComplete = (state: RootState) =>
+  state.settings.showingComplete;
 export default settingsSlice.reducer;

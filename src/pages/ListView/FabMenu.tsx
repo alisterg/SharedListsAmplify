@@ -11,12 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   toggleShowingComplete,
   logoutAsync,
-  selectSettings,
+  selectShowingComplete,
 } from "../../store/settings";
 
 const FabMenu: React.FC = () => {
   const dispatch = useDispatch();
-  const appSettings = useSelector(selectSettings);
+  const showingCompleteState = useSelector(selectShowingComplete);
 
   const handleToggleComplete = () => {
     Haptics.impact({ style: ImpactStyle.Light }).then();
@@ -42,11 +42,9 @@ const FabMenu: React.FC = () => {
         <IonFabButton onClick={handleToggleComplete}>
           <IonIcon
             icon={
-              appSettings.showingComplete
-                ? checkmarkCircleOutline
-                : ellipseOutline
+              showingCompleteState ? checkmarkCircleOutline : ellipseOutline
             }
-            color={appSettings.showingComplete ? "primary" : "medium"}
+            color={showingCompleteState ? "primary" : "medium"}
           />
         </IonFabButton>
         <IonFabButton color="danger" onClick={handleSignOutClick}>
