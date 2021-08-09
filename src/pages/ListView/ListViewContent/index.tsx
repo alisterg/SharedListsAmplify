@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { List, ListItem } from "../../models";
+import { List, ListItem } from "../../../models";
 import { DataStore } from "@aws-amplify/datastore";
 import DropdownList from "./DropdownList";
 import DropdownListItem from "./DropdownListItem";
@@ -9,16 +9,15 @@ import cloneDeep from "lodash/cloneDeep";
 import AddItemSection from "./AddItemSection";
 import styles from "../styles.module.css";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
-
-interface Props {
-  showingComplete: boolean;
-}
+import { useSelector } from "react-redux";
+import { selectSettings } from "../../../store/settings";
 
 type sortedItemsType = { [listId: string]: ListItem[] };
 
-const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
+const ListViewContent: React.FC = () => {
   const [lists, setLists] = useState<List[]>();
   const [sortedItems, setSortedItems] = useState<sortedItemsType>();
+  const appSettings = useSelector(selectSettings);
 
   useEffect(() => {
     fetchLists().then();
@@ -82,7 +81,7 @@ const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
       })
     );
 
-    await Haptics.impact({ style: ImpactStyle.Medium });
+    Haptics.impact({ style: ImpactStyle.Medium }).then();
     await fetchItems();
   };
 
@@ -97,7 +96,7 @@ const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
   };
 
   const handleDragStart = async () => {
-    await Haptics.impact({ style: ImpactStyle.Light });
+    Haptics.impact({ style: ImpactStyle.Light }).then();
   };
 
   const handleDragEnd = async (result: any) => {
@@ -177,7 +176,7 @@ const ListViewContent: React.FC<Props> = ({ showingComplete }) => {
             {...providedItem.draggableProps}
             {...providedItem.dragHandleProps}
           >
-            {!showingComplete && item.isComplete ? (
+            {!appSettings.showingComplete && item.isComplete ? (
               <></>
             ) : (
               <DropdownListItem

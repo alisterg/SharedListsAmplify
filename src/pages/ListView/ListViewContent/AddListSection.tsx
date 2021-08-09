@@ -1,45 +1,35 @@
 import React, { useState } from "react";
-import { List, ListItem } from "../../models";
+import { List } from "../../../models";
 import { IonButton, IonIcon, IonInput, IonItem } from "@ionic/react";
 import { add, arrowForward } from "ionicons/icons";
 import { DataStore } from "@aws-amplify/datastore";
+import styles from "../styles.module.css";
 import { Keyboard } from "@capacitor/keyboard";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
-interface Props {
-  list: List;
-  itemCount: number;
-}
-
-const AddItemSection: React.FC<Props> = ({ list, itemCount }) => {
+const AddListSection: React.FC = () => {
   const [quickAddInp, setQuickAddInp] = useState("");
 
-  const handleAddItemClick = async () => {
-    await DataStore.save(
-      new ListItem({
-        title: quickAddInp,
-        listID: list.id,
-        indexInList: itemCount,
-      })
-    );
-
+  const handleAddListClick = async () => {
+    await DataStore.save(new List({ name: quickAddInp }));
     await Keyboard.hide();
     await Haptics.impact({ style: ImpactStyle.Medium });
     setQuickAddInp("");
   };
 
   return (
-    <IonItem>
+    <IonItem className={styles.addList}>
       <IonIcon icon={add} slot="start" color="tertiary" />
       <IonInput
         maxlength={50}
         autocapitalize="on"
         autocorrect="on"
         value={quickAddInp}
+        placeholder="New category..."
         onIonChange={(e) => setQuickAddInp(e.detail.value!)}
       />
       {quickAddInp && (
-        <IonButton fill="clear" onClick={handleAddItemClick}>
+        <IonButton fill="clear" onClick={handleAddListClick}>
           <IonIcon icon={arrowForward} color="primary" />
         </IonButton>
       )}
@@ -47,4 +37,4 @@ const AddItemSection: React.FC<Props> = ({ list, itemCount }) => {
   );
 };
 
-export default AddItemSection;
+export default AddListSection;

@@ -5,12 +5,21 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import Amplify from "aws-amplify";
 import awsConfig from "./aws-exports";
+import { store } from "./store";
+import { STORAGE_SETTING_REDUX } from "./Constants";
+import { Provider } from "react-redux";
 
 Amplify.configure(awsConfig);
 
+store.subscribe(() => {
+  localStorage.setItem(STORAGE_SETTING_REDUX, JSON.stringify(store.getState()));
+});
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

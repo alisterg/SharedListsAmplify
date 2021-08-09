@@ -1,7 +1,7 @@
 import { IonApp, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
-import ListView from "./ListView";
+import ListView from "./pages/ListView";
 import React from "react";
 
 /* Core CSS required for Ionic components to work properly */

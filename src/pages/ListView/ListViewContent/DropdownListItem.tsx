@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { ListItem } from "../../models";
+import { ListItem } from "../../../models";
 import styles from "../styles.module.css";
 import { IonIcon, IonInput, IonItem } from "@ionic/react";
 import {

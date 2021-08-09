@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef, useState } from "react";
-import { List } from "../../models";
+import { List } from "../../../models";
 import {
   IonButton,
   IonButtons,
