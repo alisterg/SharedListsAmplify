@@ -17,11 +17,9 @@ export const settingsSlice = createSlice({
   initialState,
   reducers: {
     toggleShowingComplete: (state) => {
-      console.log("[toggleShowingComplete]", !state.showingComplete);
       state.showingComplete = !state.showingComplete;
     },
     setLoggedOut: (state) => {
-      console.log("[setLoggedOut]");
       state.isLoggedIn = false;
     },
   },

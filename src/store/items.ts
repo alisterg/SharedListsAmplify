@@ -25,11 +25,9 @@ export const itemsSlice = createSlice({
   initialState,
   reducers: {
     setSortedItems: (state, action: PayloadAction<sortedItemsType>) => {
-      console.log("[setSortedItems]", action.payload);
       state.sortedItems = action.payload;
     },
     setLists: (state, action: PayloadAction<List[]>) => {
-      console.log("[setLists]", action.payload);
       state.lists = action.payload;
     },
     setItemsSubscription: (state, action: PayloadAction<any>) => {
@@ -124,6 +122,10 @@ export const reorderItemAsync =
       const [removed] = itemsInList.splice(sourceIdx, 1);
       itemsInList.splice(destIdx, 0, removed);
 
+      const newSortedItems = cloneDeep(sortedItems);
+      newSortedItems[sourceListId] = itemsInList;
+      dispatch(setSortedItems(newSortedItems));
+
       saveReorderedItems(itemsInList, destListId);
     } else {
       const itemsInSourceList = cloneDeep(sortedItems![sourceListId]);
@@ -133,6 +135,11 @@ export const reorderItemAsync =
 
       const [removed] = itemsInSourceList.splice(sourceIdx, 1);
       itemsInDestList.splice(destIdx, 0, removed);
+
+      const newSortedItems = cloneDeep(sortedItems);
+      newSortedItems[sourceListId] = itemsInSourceList;
+      newSortedItems[destListId] = itemsInDestList;
+      dispatch(setSortedItems(newSortedItems));
 
       saveReorderedItems(itemsInSourceList, sourceListId);
       saveReorderedItems(itemsInDestList, destListId);
@@ -149,6 +156,24 @@ export const editListAsync =
     ); // Could play a saving animation here
 
     dispatch(fetchItemsAsync());
+  };
+
+export const addListAsync =
+  (title: string): AppThunk =>
+  async () => {
+    await DataStore.save(new List({ name: title }));
+  };
+
+export const addItemAsync =
+  (title: string, listId: string, indexInList: number): AppThunk =>
+  async () => {
+    await DataStore.save(
+      new ListItem({
+        title: title,
+        listID: listId,
+        indexInList: indexInList,
+      })
+    );
   };
 
 export const selectItems = (state: RootState) => state.items.sortedItems;

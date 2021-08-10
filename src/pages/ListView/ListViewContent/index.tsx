@@ -7,7 +7,6 @@ import AddListSection from "./AddListSection";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import AddItemSection from "./AddItemSection";
 import styles from "../styles.module.css";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { useDispatch, useSelector } from "react-redux";
 import { selectShowingComplete } from "../../../store/settings";
 import {
@@ -20,6 +19,7 @@ import {
   selectLists,
   toggleItemCompleteAsync,
 } from "../../../store/items";
+import { lightHaptic, mediumHaptic } from "../../../helpers/capacitorHelpers";
 
 const ListViewContent: React.FC = () => {
   const lists = useSelector(selectLists);
@@ -50,7 +50,7 @@ const ListViewContent: React.FC = () => {
   };
 
   const handleToggleItemComplete = async (item: ListItem) => {
-    Haptics.impact({ style: ImpactStyle.Medium }).then();
+    mediumHaptic();
     dispatch(toggleItemCompleteAsync(item));
   };
 
@@ -59,7 +59,7 @@ const ListViewContent: React.FC = () => {
   };
 
   const handleDragStart = async () => {
-    Haptics.impact({ style: ImpactStyle.Light }).then();
+    lightHaptic()
   };
 
   const handleDragEnd = async (result: any) => {

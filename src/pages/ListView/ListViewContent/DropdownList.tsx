@@ -11,7 +11,7 @@ import {
 } from "@ionic/react";
 import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
 import styles from "../styles.module.css";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import {mediumHaptic} from "../../../helpers/capacitorHelpers";
 
 interface Props {
   list: List;
@@ -42,7 +42,7 @@ const DropdownList: React.FC<Props> = ({
 
   const handleToggleExpand = async () => {
     setIsExpanded(!isExpanded);
-    await Haptics.impact({ style: ImpactStyle.Medium });
+    mediumHaptic();
   };
 
   return (

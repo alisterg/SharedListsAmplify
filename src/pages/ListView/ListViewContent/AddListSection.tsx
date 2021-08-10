@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { List } from "../../../models";
 import { IonButton, IonIcon, IonInput, IonItem } from "@ionic/react";
 import { add, arrowForward } from "ionicons/icons";
-import { DataStore } from "@aws-amplify/datastore";
 import styles from "../styles.module.css";
-import { Keyboard } from "@capacitor/keyboard";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { useDispatch } from "react-redux";
+import { addListAsync } from "../../../store/items";
+import { hideKeyboard, mediumHaptic } from "../../../helpers/capacitorHelpers";
 
 const AddListSection: React.FC = () => {
   const [quickAddInp, setQuickAddInp] = useState("");
+  const dispatch = useDispatch();
 
   const handleAddListClick = async () => {
-    await DataStore.save(new List({ name: quickAddInp }));
-    await Keyboard.hide();
-    await Haptics.impact({ style: ImpactStyle.Medium });
+    dispatch(addListAsync(quickAddInp));
+    hideKeyboard();
+    mediumHaptic();
     setQuickAddInp("");
   };
 

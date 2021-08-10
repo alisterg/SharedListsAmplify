@@ -1,5 +1,4 @@
 import { IonFab, IonFabButton, IonFabList, IonIcon } from "@ionic/react";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import {
   checkmarkCircleOutline,
   ellipseOutline,
@@ -13,18 +12,19 @@ import {
   logoutAsync,
   selectShowingComplete,
 } from "../../store/settings";
+import { lightHaptic } from "../../helpers/capacitorHelpers";
 
 const FabMenu: React.FC = () => {
   const dispatch = useDispatch();
   const showingCompleteState = useSelector(selectShowingComplete);
 
   const handleToggleComplete = () => {
-    Haptics.impact({ style: ImpactStyle.Light }).then();
+    lightHaptic();
     dispatch(toggleShowingComplete());
   };
 
   const handleSignOutClick = async () => {
-    Haptics.impact({ style: ImpactStyle.Light }).then();
+    lightHaptic();
     dispatch(logoutAsync());
   };
 
@@ -33,7 +33,7 @@ const FabMenu: React.FC = () => {
       <IonFabButton
         mode="ios"
         color="primary"
-        onClick={() => Haptics.impact({ style: ImpactStyle.Light })}
+        onClick={() => lightHaptic()}
         size="small"
       >
         <IonIcon className="white-color" icon={settings} size="small" />
