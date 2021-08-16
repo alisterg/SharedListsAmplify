@@ -1,10 +1,22 @@
-type List @model @auth(rules: [{allow: owner}]) {
+type List @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   name: String!
   childItems: [ListItem] @connection(keyName: "byList", fields: ["id"])
 }
 
-type ListItem @model @key(name: "byList", fields: ["listID"]) @auth(rules: [{allow: owner}]) {
+type ListItem
+  @model
+  @key(name: "byList", fields: ["listID"])
+  @auth(
+    rules: [
+      { allow: owner }
+      {
+        allow: private
+        provider: iam
+        operations: [read, update, create, delete]
+      }
+    ]
+  ) {
   id: ID!
   title: String!
   isComplete: Boolean
@@ -12,4 +24,3 @@ type ListItem @model @key(name: "byList", fields: ["listID"]) @auth(rules: [{all
   parentList: List @connection
   indexInList: Int
 }
- 
