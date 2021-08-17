@@ -175,6 +175,16 @@ export const schema = {
                                     "delete",
                                     "read"
                                 ]
+                            },
+                            {
+                                "allow": "private",
+                                "provider": "iam",
+                                "operations": [
+                                    "read",
+                                    "update",
+                                    "create",
+                                    "delete"
+                                ]
                             }
                         ]
                     }

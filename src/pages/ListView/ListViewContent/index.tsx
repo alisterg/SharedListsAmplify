@@ -59,7 +59,7 @@ const ListViewContent: React.FC = () => {
   };
 
   const handleDragStart = async () => {
-    lightHaptic()
+    lightHaptic();
   };
 
   const handleDragEnd = async (result: any) => {

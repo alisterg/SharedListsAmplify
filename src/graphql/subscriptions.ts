@@ -19,6 +19,7 @@ export const onCreateList = /* GraphQL */ `
           title
           isComplete
           listID
+          indexInList
           _version
           _deleted
           _lastChangedAt
@@ -49,6 +50,7 @@ export const onUpdateList = /* GraphQL */ `
           title
           isComplete
           listID
+          indexInList
           _version
           _deleted
           _lastChangedAt
@@ -79,6 +81,7 @@ export const onDeleteList = /* GraphQL */ `
           title
           isComplete
           listID
+          indexInList
           _version
           _deleted
           _lastChangedAt
@@ -99,6 +102,7 @@ export const onCreateListItem = /* GraphQL */ `
       title
       isComplete
       listID
+      indexInList
       _version
       _deleted
       _lastChangedAt
@@ -129,6 +133,7 @@ export const onUpdateListItem = /* GraphQL */ `
       title
       isComplete
       listID
+      indexInList
       _version
       _deleted
       _lastChangedAt
@@ -159,6 +164,7 @@ export const onDeleteListItem = /* GraphQL */ `
       title
       isComplete
       listID
+      indexInList
       _version
       _deleted
       _lastChangedAt

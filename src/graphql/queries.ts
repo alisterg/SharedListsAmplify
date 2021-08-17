@@ -19,6 +19,7 @@ export const getList = /* GraphQL */ `
           title
           isComplete
           listID
+          indexInList
           _version
           _deleted
           _lastChangedAt
@@ -97,6 +98,7 @@ export const getListItem = /* GraphQL */ `
       title
       isComplete
       listID
+      indexInList
       _version
       _deleted
       _lastChangedAt
@@ -132,6 +134,7 @@ export const listListItems = /* GraphQL */ `
         title
         isComplete
         listID
+        indexInList
         _version
         _deleted
         _lastChangedAt
@@ -172,6 +175,7 @@ export const syncListItems = /* GraphQL */ `
         title
         isComplete
         listID
+        indexInList
         _version
         _deleted
         _lastChangedAt
