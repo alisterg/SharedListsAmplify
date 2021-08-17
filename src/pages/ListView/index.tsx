@@ -1,6 +1,9 @@
 import {
+  IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -9,12 +12,20 @@ import React from "react";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import ListViewContent from "./ListViewContent";
 import FabMenu from "./FabMenu";
+import { reload } from "ionicons/icons";
 
 const ListView: React.FC = () => {
+  const handleReloadClick = () => window.location.reload();
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonButton onClick={handleReloadClick}>
+              <IonIcon icon={reload} />
+            </IonButton>
+          </IonButtons>
           <IonTitle>🍍 Go Shop 🍉</IonTitle>
         </IonToolbar>
       </IonHeader>

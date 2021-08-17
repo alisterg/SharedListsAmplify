@@ -9,9 +9,16 @@ import {
   IonInput,
   IonItem,
 } from "@ionic/react";
-import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
+import {
+  chevronDownOutline,
+  chevronForwardOutline,
+  trashOutline,
+} from "ionicons/icons";
 import styles from "../styles.module.css";
-import {mediumHaptic} from "../../../helpers/capacitorHelpers";
+import { lightHaptic, mediumHaptic } from "../../../helpers/capacitorHelpers";
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsDeleting } from "../../../store/settings";
+import { deleteListAsync } from "../../../store/items";
 
 interface Props {
   list: List;
@@ -31,6 +38,9 @@ const DropdownList: React.FC<Props> = ({
   const [isCurrentlyEditing, setIsCurrentlyEditing] = useState(false);
   const inputRefEle = useRef<HTMLIonInputElement>(null);
 
+  const isDeleting = useSelector(selectIsDeleting);
+  const dispatch = useDispatch();
+
   const handleSetEditing = () => {
     inputRefEle.current!.focus();
   };
@@ -43,6 +53,11 @@ const DropdownList: React.FC<Props> = ({
   const handleToggleExpand = async () => {
     setIsExpanded(!isExpanded);
     mediumHaptic();
+  };
+
+  const handleDeleteClicked = () => {
+    lightHaptic();
+    dispatch(deleteListAsync(list));
   };
 
   return (
@@ -69,6 +84,14 @@ const DropdownList: React.FC<Props> = ({
             />
           </IonCardTitle>
         </IonItem>
+
+        {isDeleting && (
+          <IonButtons slot="end">
+            <IonButton onClick={handleDeleteClicked}>
+              <IonIcon color="danger" icon={trashOutline} />
+            </IonButton>
+          </IonButtons>
+        )}
       </div>
 
       {isExpanded && <div className={styles.cardContent}>{children}</div>}

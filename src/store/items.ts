@@ -176,6 +176,18 @@ export const addItemAsync =
     );
   };
 
+export const deleteItemAsync =
+  (item: ListItem): AppThunk =>
+  async () => {
+    await DataStore.delete(item);
+  };
+
+export const deleteListAsync =
+  (list: List): AppThunk =>
+  async () => {
+    await DataStore.delete(list);
+  };
+
 export const selectItems = (state: RootState) => state.items.sortedItems;
 export const selectLists = (state: RootState) => state.items.lists;
 export default itemsSlice.reducer;

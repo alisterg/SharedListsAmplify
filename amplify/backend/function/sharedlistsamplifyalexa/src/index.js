@@ -22,6 +22,16 @@ const AddItemHandler = {
   handle: async (handlerInput) => {
     const request = handlerInput.requestEnvelope.request;
 
+    if (request.type === "LaunchRequest") {
+      const response = handlerInput.responseBuilder
+        .speak("Add some items")
+        .withSimpleCard("ShopShop", "Let me add items to your list")
+        .getResponse();
+
+      response.shouldEndSession = false;
+      return response;
+    }
+
     const itemName = request.intent.slots["itemName"].value;
     const listName = request.intent.slots["listName"].value;
 
@@ -53,8 +63,6 @@ const HelpHandler = {
     );
   },
   handle(handlerInput) {
-    const requestAttributes =
-      handlerInput.attributesManager.getRequestAttributes();
     return handlerInput.responseBuilder
       .speak(fallbacks.HELP_MESSAGE)
       .reprompt(fallbacks.HELP_REPROMPT)
@@ -73,8 +81,6 @@ const FallbackHandler = {
     );
   },
   handle(handlerInput) {
-    const requestAttributes =
-      handlerInput.attributesManager.getRequestAttributes();
     return handlerInput.responseBuilder
       .speak(fallbacks.FALLBACK_MESSAGE)
       .reprompt(fallbacks.FALLBACK_REPROMPT)
@@ -92,8 +98,6 @@ const ExitHandler = {
     );
   },
   handle(handlerInput) {
-    const requestAttributes =
-      handlerInput.attributesManager.getRequestAttributes();
     return handlerInput.responseBuilder
       .speak(fallbacks.STOP_MESSAGE)
       .getResponse();
@@ -120,8 +124,7 @@ const ErrorHandler = {
   handle(handlerInput, error) {
     console.log(`Error handled: ${error.message}`);
     console.log(`Error stack: ${error.stack}`);
-    const requestAttributes =
-      handlerInput.attributesManager.getRequestAttributes();
+
     return handlerInput.responseBuilder
       .speak(fallbacks.ERROR_MESSAGE)
       .reprompt(fallbacks.ERROR_MESSAGE)
