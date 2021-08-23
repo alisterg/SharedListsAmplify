@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "./index";
 import { Auth, DataStore } from "aws-amplify";
 

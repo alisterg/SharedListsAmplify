@@ -25,12 +25,15 @@ const AddItemHandler = {
     if (request.type === "LaunchRequest") {
       const response = handlerInput.responseBuilder
         .speak("Add some items")
-        .withSimpleCard("ShopShop", "Let me add items to your list")
         .getResponse();
+
+      console.log("Processing launch request");
 
       response.shouldEndSession = false;
       return response;
     }
+
+    console.log("Processing add item request");
 
     const itemName = request.intent.slots["itemName"].value;
     const listName = request.intent.slots["listName"].value;
