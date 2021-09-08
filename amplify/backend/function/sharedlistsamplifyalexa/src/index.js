@@ -36,13 +36,15 @@ const AddItemHandler = {
     console.log("Processing add item request");
 
     const itemName = request.intent.slots["itemName"].value;
-    const listName = request.intent.slots["listName"].value;
+    let listName = request.intent.slots["listName"].value;
+    if (!listName) listName = "Other";
 
     await createListItem(itemName, listName);
 
     return handlerInput.responseBuilder
       .speak("Item added")
       .withSimpleCard("ShopShop", "Item added")
+      .withShouldEndSession(false)
       .getResponse();
   },
 };
